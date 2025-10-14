@@ -1,48 +1,38 @@
-// Проверка, залогинен ли пользователь
-const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-if (!currentUser) {
-    alert('Сначала войдите в систему');
-    window.location.href = 'index.html';
-}
+// Получаем элементы даты
+const habitDateInput = document.getElementById('habit-date');
 
-// Элементы страницы
-const habitInput = document.getElementById('habit-name');
-const addBtn = document.getElementById('add-btn');
-const habitsList = document.getElementById('habits');
-const logoutBtn = document.getElementById('logout-btn');
-
-// Загружаем привычки текущего пользователя
-let habits = JSON.parse(localStorage.getItem('habits_' + currentUser.email)) || [];
-renderHabits();
+// Устанавливаем сегодняшнюю дату по умолчанию
+habitDateInput.valueAsDate = today;
 
 // ----------------- Добавление привычки -----------------
 addBtn.addEventListener('click', () => {
     const name = habitInput.value.trim();
-    if (name) {
-        habits.push({ name, done: false });
-        habitInput.value = '';
-        saveHabits();
-        renderHabits();
-    }
+    const date = habitDateInput.value; // дата в формате YYYY-MM-DD
+    if (!name) return alert('Введите название привычки');
+    if (!date) return alert('Выберите дату');
+
+    habits.push({ name, done: false, date });
+    habitInput.value = '';
+    habitDateInput.valueAsDate = today;
+    saveHabits();
+    renderHabits();
+    renderCalendar(); // обновляем календарь, если хотим показывать даты с привычками
 });
 
-// ----------------- Сохранение привычек -----------------
-function saveHabits() {
-    localStorage.setItem('habits_' + currentUser.email, JSON.stringify(habits));
-}
-
 // ----------------- Отображение привычек -----------------
-function renderHabits() {
+function renderHabits(selectedDate = today.toISOString().split('T')[0]) {
     habitsList.innerHTML = '';
-    habits.forEach((habit, index) => {
+    // фильтруем привычки по выбранной дате
+    const filteredHabits = habits.filter(h => h.date === selectedDate);
+    filteredHabits.forEach((habit, index) => {
         const li = document.createElement('li');
         li.className = 'habit-item';
         li.innerHTML = `
             <span style="text-decoration:${habit.done ? 'line-through' : 'none'}">${habit.name}</span>
             <div class="buttons">
-                <button onclick="toggleDone(${index})">${habit.done ? 'Сбросить' : 'Выполнено'}</button>
-                <button onclick="editHabit(${index})">Редактировать</button>
-                <button onclick="deleteHabit(${index})">Удалить</button>
+                <button onclick="toggleDone('${habit.date}', ${index})">${habit.done ? 'Сбросить' : 'Выполнено'}</button>
+                <button onclick="editHabit('${habit.date}', ${index})">Редактировать</button>
+                <button onclick="deleteHabit('${habit.date}', ${index})">Удалить</button>
             </div>
         `;
         habitsList.appendChild(li);
@@ -50,33 +40,53 @@ function renderHabits() {
 }
 
 // ----------------- Отметка выполнения -----------------
-function toggleDone(index) {
-    habits[index].done = !habits[index].done;
+function toggleDone(date, index) {
+    const filtered = habits.filter(h => h.date === date);
+    const habitIndex = habits.indexOf(filtered[index]);
+    habits[habitIndex].done = !habits[habitIndex].done;
     saveHabits();
-    renderHabits();
+    renderHabits(date);
 }
 
 // ----------------- Редактирование привычки -----------------
-function editHabit(index) {
-    const newName = prompt('Введите новое название привычки:', habits[index].name);
+function editHabit(date, index) {
+    const filtered = habits.filter(h => h.date === date);
+    const habitIndex = habits.indexOf(filtered[index]);
+    const newName = prompt('Введите новое название привычки:', habits[habitIndex].name);
     if (newName && newName.trim() !== '') {
-        habits[index].name = newName.trim();
+        habits[habitIndex].name = newName.trim();
         saveHabits();
-        renderHabits();
+        renderHabits(date);
     }
 }
 
 // ----------------- Удаление привычки -----------------
-function deleteHabit(index) {
+function deleteHabit(date, index) {
+    const filtered = habits.filter(h => h.date === date);
+    const habitIndex = habits.indexOf(filtered[index]);
     if (confirm('Вы уверены, что хотите удалить эту привычку?')) {
-        habits.splice(index, 1);
+        habits.splice(habitIndex, 1);
         saveHabits();
-        renderHabits();
+        renderHabits(date);
     }
 }
 
-// ----------------- Выход из системы -----------------
-logoutBtn.addEventListener('click', () => {
-    localStorage.removeItem('currentUser');
-    window.location.href = 'index.html';
-});
+// ----------------- Календарь с кликабельными датами -----------------
+function renderCalendar() {
+    calendarList.innerHTML = '';
+    const monthDays = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+    for (let i = 1; i <= monthDays; i++) {
+        const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+        const li = document.createElement('li');
+        li.textContent = i;
+        // если есть привычка на эту дату — выделяем
+        if (habits.some(h => h.date === dateStr)) {
+            li.style.backgroundColor = '#a0e7a0';
+        }
+        li.addEventListener('click', () => {
+            renderHabits(dateStr);
+            habitDateInput.value = dateStr; // при добавлении привычки дата будет выбранная
+        });
+        calendarList.appendChild(li);
+    }
+}
