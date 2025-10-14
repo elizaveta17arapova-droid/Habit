@@ -42,12 +42,14 @@ loginBtn.addEventListener('click', () => {
 
     const user = users.find(u => u.email === email && u.password === password);
     if (user) {
+        localStorage.setItem('currentUser', JSON.stringify(user));
         alert('Вход успешен!');
-        // Здесь можно перенаправить на страницу трекера привычек
+        window.location.href = 'tracker.html'; // переход на трекер привычек
     } else {
         alert('Неправильный email или пароль');
     }
 });
+
 
 // ----------------- Сброс пароля -----------------
 resetBtn.addEventListener('click', () => {
