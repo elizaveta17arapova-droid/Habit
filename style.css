@@ -64,6 +64,7 @@ header h1 {
 #calendar li:hover {
     background-color: #d0f0d0;
 }
+
 /* ======= Общие настройки ======= */
 body {
     margin: 0;
@@ -92,13 +93,17 @@ body {
 }
 
 /* ======= Заголовки ======= */
-h1, h2 {
+h1,
+h2 {
     color: #2b6777;
     margin-bottom: 20px;
 }
 
 /* ======= Инпуты ======= */
-input[type="text"], input[type="password"], input[type="email"], input[type="date"] {
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="date"] {
     width: 90%;
     padding: 12px;
     margin: 10px 0;
@@ -176,4 +181,209 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+/* === Общие стили === */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #ece9e6, #ffffff);
+    min-height: 100vh;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+}
+
+/* === Шапка === */
+header {
+    background: #4a90e2;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+header h1 {
+    font-size: 1.8em;
+}
+
+#profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#user-email {
+    font-weight: 600;
+}
+
+#current-date {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 0.9em;
+}
+
+#logout-btn {
+    background: #ff5252;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#logout-btn:hover {
+    background: #ff1744;
+}
+
+/* === Основная часть === */
+main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding: 30px;
+}
+
+/* === Секции === */
+section {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+    transition: transform 0.2s;
+}
+
+section:hover {
+    transform: translateY(-3px);
+}
+
+h2,
+h3 {
+    color: #4a90e2;
+    margin-bottom: 15px;
+}
+
+/* === Добавление привычки === */
+#add-habit {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#add-habit input,
+#add-habit button {
+    padding: 10px;
+    border: 2px solid #4a90e2;
+    border-radius: 10px;
+    font-size: 1em;
+    outline: none;
+}
+
+#add-habit input:focus {
+    border-color: #007aff;
+}
+
+#add-btn {
+    background: #4a90e2;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#add-btn:hover {
+    background: #007aff;
+}
+
+/* === Список привычек === */
+#habits {
+    list-style: none;
+    margin-top: 10px;
+}
+
+.habit-item {
+    background: #f5f8ff;
+    border-left: 5px solid #4a90e2;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.habit-item span {
+    font-size: 1em;
+}
+
+.habit-item button {
+    border: none;
+    background: #e3f2fd;
+    color: #333;
+    margin-left: 5px;
+    border-radius: 8px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.habit-item button:hover {
+    background: #4a90e2;
+    color: white;
+}
+
+/* === Статистика === */
+#stats {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 1.1em;
+}
+
+/* === Календарь === */
+#calendar-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 10px;
+}
+
+#calendar-list li {
+    background: #f2f7ff;
+    border-radius: 8px;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#calendar-list li:hover {
+    background: #dbe9ff;
+}
+
+#calendar-list li.active {
+    background: #4a90e2;
+    color: white;
+    font-weight: bold;
+}
+
+/* === Адаптивность === */
+@media (max-width: 900px) {
+    main {
+        grid-template-columns: 1fr;
+    }
+
+    header {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
