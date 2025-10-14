@@ -11,17 +11,38 @@
 <body>
     <header>
         <h1>Трекер привычек</h1>
-        <button id="logout-btn">Выйти</button>
+        <div id="profile">
+            <span id="user-email"></span>
+            <span id="current-date"></span>
+            <button id="logout-btn">Выйти</button>
+        </div>
     </header>
 
     <main>
-        <section id="add-habit">
-            <input type="text" id="habit-name" placeholder="Название привычки">
-            <button id="add-btn">Добавить привычку</button>
+        <!-- Сегодняшние привычки -->
+        <section id="today-habits">
+            <h2>Привычки выбранной даты</h2>
+            <ul id="habits"></ul>
         </section>
 
-        <section id="habit-list">
-            <ul id="habits"></ul>
+        <!-- Панель добавления привычки -->
+        <section id="add-habit">
+            <input type="text" id="habit-name" placeholder="Новая привычка">
+            <input type="date" id="habit-date">
+            <button id="add-btn">Добавить</button>
+        </section>
+
+        <!-- Статистика -->
+        <section id="stats">
+            <h2>Статистика</h2>
+            <p>Процент выполнения: <span id="completion">0%</span></p>
+            <p>Streak текущей привычки: <span id="streak">0</span> дней</p>
+        </section>
+
+        <!-- Календарь -->
+        <section id="calendar">
+            <h3>Календарь</h3>
+            <ul id="calendar-list"></ul>
         </section>
     </main>
 
@@ -29,9 +50,3 @@
 </body>
 
 </html>
-<!-- Панель добавления привычки -->
-<section id="add-habit">
-    <input type="text" id="habit-name" placeholder="Новая привычка">
-    <input type="date" id="habit-date" value="">
-    <button id="add-btn">Добавить</button>
-</section>
