@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль пользователя</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1 id="welcome"></h1>
+        <button id="logout-btn">Выйти</button>
+    </header>
+
+    <main>
+        <!-- Сегодняшняя дата -->
+        <section id="today">
+            <h2 id="date"></h2>
+        </section>
+
+        <!-- Календарь -->
+        <section id="calendar">
+            <div id="weekdays">
+                <span>ВС</span><span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span>
+            </div>
+            <div id="days"></div>
+        </section>
+
+        <!-- Привычки -->
+        <section id="habits-section">
+            <h3>Мои привычки на сегодня</h3>
+            <ul id="habit-list"></ul>
+        </section>
+
+        <!-- Добавление новой привычки -->
+        <section id="add-habit">
+            <input type="text" id="habit-input" placeholder="Новая привычка...">
+            <button id="add-btn">Добавить</button>
+        </section>
+    </main>
+
+    <script src="profile.js"></script>
+</body>
+
+</html>
