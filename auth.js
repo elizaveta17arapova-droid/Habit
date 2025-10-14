@@ -1,4 +1,6 @@
+// =========================
 // Получаем элементы
+// =========================
 const regEmail = document.getElementById('reg-email');
 const regPassword = document.getElementById('reg-password');
 const registerBtn = document.getElementById('register-btn');
@@ -9,15 +11,50 @@ const loginBtn = document.getElementById('login-btn');
 
 const resetBtn = document.getElementById('reset-btn');
 
-// Получаем или создаём "базу пользователей" в localStorage
-let users = JSON.parse(localStorage.getItem('users')) || [];
+// Переключатели между формами
+const loginSection = document.getElementById('login-section');
+const registerSection = document.getElementById('register-section');
+const toRegister = document.getElementById('to-register');
+const toLogin = document.getElementById('to-login');
 
-// ----------------- Регистрация -----------------
+// "База пользователей"
+let users = JSON.parse(localStorage.getItem('users'))  ();
+
+// =========================
+// Автоматический переход на регистрацию, если нет пользователей
+// =========================
+document.addEventListener('DOMContentLoaded', () => {
+    if (users.length === 0) {
+        loginSection.style.display = 'none';
+        registerSection.style.display = 'block';
+    } else {
+        loginSection.style.display = 'block';
+        registerSection.style.display = 'none';
+    }
+});
+
+// =========================
+// Переключение между регистрацией и входом
+// =========================
+toRegister.addEventListener('click', () => {
+    loginSection.style.display = 'none';
+    registerSection.style.display = 'block';
+});
+
+toLogin.addEventListener('click', () => {
+    registerSection.style.display = 'none';
+    loginSection.style.display = 'block';
+});
+
+// =========================
+// Регистрация
+// =========================
 registerBtn.addEventListener('click', () => {
     const email = regEmail.value.trim();
     const password = regPassword.value.trim();
 
-    if (!email || !password) {
+    if (!
+        password) {
         alert('Введите email и пароль');
         return;
     }
@@ -27,15 +64,21 @@ registerBtn.addEventListener('click', () => {
         return;
     }
 
-    // Сохраняем пользователя
-    users.push({ email, password }); // в будущем пароль хэшировать!
+    users.push({ email, password }); // (в будущем можно хэшировать пароль)
     localStorage.setItem('users', JSON.stringify(users));
-    alert('Регистрация успешна!');
+
+    alert('Регистрация успешна! Теперь войдите в систему.');
+
+    // Очищаем поля и переключаем обратно на вход
     regEmail.value = '';
     regPassword.value = '';
+    registerSection.style.display = 'none';
+    loginSection.style.display = 'block';
 });
 
-// ----------------- Вход -----------------
+// =========================
+// Вход
+// =========================
 loginBtn.addEventListener('click', () => {
     const email = loginEmail.value.trim();
     const password = loginPassword.value.trim();
@@ -44,14 +87,15 @@ loginBtn.addEventListener('click', () => {
     if (user) {
         localStorage.setItem('currentUser', JSON.stringify(user));
         alert('Вход успешен!');
-        window.location.href = 'tracker.html'; // переход на трекер привычек
+        window.location.href = 'tracker.html'; // Переход на трекер привычек
     } else {
         alert('Неправильный email или пароль');
     }
 });
 
-
-// ----------------- Сброс пароля -----------------
+// =========================
+// Сброс пароля
+// =========================
 resetBtn.addEventListener('click', () => {
     const email = prompt('Введите ваш email для сброса пароля:');
     if (!email) return alert('Email не введён');
@@ -69,11 +113,13 @@ resetBtn.addEventListener('click', () => {
     alert('Пароль успешно сброшен');
 });
 
-// ----------------- Соц. вход (имитация) -----------------
+// =========================
+// Соц. вход (имитация)
+// =========================
 document.getElementById('google-login').addEventListener('click', () => {
-    alert('Вход через Google (тестовая кнопка)');
+    alert('Вход через Google (демо-режим)');
 });
 
 document.getElementById('apple-login').addEventListener('click', () => {
-    alert('Вход через Apple (тестовая кнопка)');
+    alert('Вход через Apple (демо-режим)');
 });
