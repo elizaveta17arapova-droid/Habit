@@ -18,7 +18,7 @@ const toRegister = document.getElementById('to-register');
 const toLogin = document.getElementById('to-login');
 
 // "База пользователей"
-let users = JSON.parse(localStorage.getItem('users'))  ();
+let users = JSON.parse(localStorage.getItem('users')) || [];
 
 // =========================
 // Автоматический переход на регистрацию, если нет пользователей
@@ -53,8 +53,7 @@ registerBtn.addEventListener('click', () => {
     const email = regEmail.value.trim();
     const password = regPassword.value.trim();
 
-    if (!
-        password) {
+    if (!email || !password) {
         alert('Введите email и пароль');
         return;
     }
