@@ -1,5 +1,4 @@
-habits[habitIndex].name=newName.trim();
-    habits[habitIndex].date=newDate;
+habits[habitIndex].date=newDate;
     saveHabits();
     renderHabits();
     renderCalendar();
@@ -26,26 +25,19 @@ logoutBtn.addEventListener('click', ()=>{
 // Календарь
 function renderCalendar(){
     calendarList.innerHTML='';
-    const monthDays = new Date(today.getFullYear(),today.getMonth()+1,0).getDate();
+    const monthDays = new Date(today.getFullYear(), today.getMonth()+1,0).getDate();
     for(let i=1;i<=monthDays;i++){
         const dateStr=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
         const li=document.createElement('li');
         li.textContent=i;
-
-        if(habits.some(h=>h.date===dateStr)){
-            li.style.backgroundColor='#a0e7a0';
-        }
-        if(dateStr===selectedDate){
-            li.style.border='2px solid #333';
-        }
-
-        li.addEventListener('click',()=>{
+        if(habits.some(h=>h.date===dateStr)) li.style.backgroundColor='#a0e7a0';
+        if(dateStr===selectedDate) li.style.border='2px solid #333';
+        li.addEventListener('click', ()=>{
             selectedDate=dateStr;
             habitDateInput.value=dateStr;
             renderHabits();
             renderCalendar();
         });
-
         calendarList.appendChild(li);
     }
 }

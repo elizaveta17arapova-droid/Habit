@@ -1,6 +1,7 @@
+/* === Общие стили === */
 body {
     font-family: 'Segoe UI', sans-serif;
-    background-color: #f5f8ff;
+    background: linear-gradient(135deg, #ece9e6, #ffffff);
     color: #333;
     margin: 0;
     display: flex;
@@ -9,6 +10,7 @@ body {
     min-height: 100vh;
 }
 
+/* === Шапка === */
 header {
     background-color: #4a90e2;
     color: white;
@@ -27,24 +29,26 @@ header h1 {
     margin: 0;
 }
 
-#profile-menu {
+/* === Профиль === */
+#profile {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-#user-email {
+#profile span {
     font-weight: 600;
 }
 
-#current-date {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 5px 10px;
-    border-radius: 10px;
-    font-size: 0.9em;
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ffffff;
 }
 
-#logout-btn, #change-avatar-btn {
+#change-avatar-btn, #logout-btn {
     background-color: #ffffff;
     color: #4a90e2;
     border: 1px solid #4a90e2;
@@ -54,20 +58,12 @@ header h1 {
     transition: 0.3s;
 }
 
-#logout-btn:hover, #change-avatar-btn:hover {
+#change-avatar-btn:hover, #logout-btn:hover {
     background-color: #4a90e2;
     color: white;
 }
 
-.avatar-large {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #4a90e2;
-}
-
-/* Основной контент */
+/* === Основной контент === */
 main {
     width: 100%;
     max-width: 1100px;
@@ -78,10 +74,11 @@ main {
     box-sizing: border-box;
 }
 
+/* === Секции === */
 section {
     background-color: white;
     border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     padding: 20px;
     box-sizing: border-box;
 }
@@ -91,7 +88,8 @@ section h2, section h3 {
     color: #4a90e2;
 }
 
-#habits, #archived-habits {
+/* === Привычки === */
+#habits {
     list-style: none;
     padding: 0;
     margin: 10px 0;
@@ -112,6 +110,7 @@ section h2, section h3 {
     text-decoration: line-through;
 }
 
+/* === Календарь === */
 #calendar-list {
     display: flex;
     flex-wrap: wrap;
@@ -140,6 +139,7 @@ section h2, section h3 {
     color: white;
 }
 
+/* === Добавление привычек === */
 #add-habit {
     display: flex;
     gap: 10px;
@@ -169,6 +169,7 @@ section h2, section h3 {
     background-color: #3a7cd6;
 }
 
+/* === Адаптивность === */
 @media (max-width: 900px) {
     main {
         grid-template-columns: 1fr;
@@ -178,7 +179,7 @@ section h2, section h3 {
         margin: 20px auto;
     }
 
-    #profile-menu {
+    #profile {
         flex-direction: column;
         gap: 6px;
         align-items: center;
