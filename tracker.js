@@ -17,7 +17,11 @@ function deleteHabit(index){
 }
 
 // Выход
+<<<<<<< HEAD
  getComputedStylelogoutBtn.addEventListener('click', ()=>{
+=======
+logoutBtn.addEventListener('click', ()=>{
+>>>>>>> d606adf7a3d69e2571ffc3936e27022a0df4228e
     localStorage.removeItem('currentUser');
     window.location.href='index.html';
 });
@@ -33,7 +37,11 @@ function renderCalendar(){
         if(habits.some(h=>h.date===dateStr)) li.style.backgroundColor='#a0e7a0';
         if(dateStr===selectedDate) li.style.border='2px solid #333';
         li.addEventListener('click', ()=>{
+<<<<<<< HEAD
             selectedDate=dateStr; 
+=======
+            selectedDate=dateStr;
+>>>>>>> d606adf7a3d69e2571ffc3936e27022a0df4228e
             habitDateInput.value=dateStr;
             renderHabits();
             renderCalendar();                
