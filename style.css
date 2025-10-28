@@ -387,63 +387,235 @@ h3 {
         gap: 10px;
     }
 }
-/* === Центрирование и адаптивная ширина === */
+/* === Общий стиль === */
 body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #121212, #1e1e1e);
+    color: #f0f0f0;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    padding: 0 20px;
   }
   
-  /* Контейнер для основного контента */
-  main {
-    width: 100%;
-    max-width: 1100px; /* чтобы не растягивалось на широких экранах */
-    margin: 30px auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-  }
-  
-  /* Центрируем шапку */
+  /* === Шапка === */
   header {
     width: 100%;
-    max-width: 1100px;
-    border-radius: 0 0 16px 16px;
-    margin: 0 auto;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: #202020;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   }
   
-  /* На телефоне — одна колонка */
+  header h1 {
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+  
+  #profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  #logout-btn {
+    background-color: #ff5252;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+    transition: 0.3s;
+  }
+  
+  #logout-btn:hover {
+    background-color: #ff7777;
+  }
+  
+  /* === Контейнер приложения === */
+  .app-container {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  main {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-areas:
+      "calendar stats"
+      "today-habits add-habit"
+      "archive archive";
+    gap: 25px;
+    width: 100%;
+  }
+  
+  /* === Календарь === */
+  #calendar {
+    grid-area: calendar;
+    background-color: #1a1a1a;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  }
+  
+  #calendar h3 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  #calendar-list {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 8px;
+  }
+  
+  #calendar-list li {
+    list-style: none;
+    background-color: #2b2b2b;
+    padding: 8px 14px;
+    border-radius: 8px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  #calendar-list li:hover {
+    background-color: #3b3b3b;
+  }
+  
+  /* === Привычки === */
+  #today-habits {
+    grid-area: today-habits;
+    background-color: #1a1a1a;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  }
+  
+  .habit-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #252525;
+    padding: 8px 12px;
+    margin: 6px 0;
+    border-radius: 8px;
+  }
+  
+  .habit-item .buttons {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .habit-item button {
+    background-color: #2b2b2b;
+    border: none;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .habit-item button:hover {
+    background-color: #4caf50;
+  }
+  
+  /* === Добавление привычек === */
+  #add-habit {
+    grid-area: add-habit;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  }
+  
+  #add-habit input, #add-habit button {
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+  }
+  
+  #add-btn {
+    background-color: #4caf50;
+    color: white;
+    cursor: pointer;
+  }
+  
+  /* === Статистика === */
+  #stats {
+    grid-area: stats;
+    background-color: #1a1a1a;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  }
+  
+  /* === Архив === */
+  #archive {
+    grid-area: archive;
+    background-color: #1a1a1a;
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 15px;
+  }
+  
+  /* === Фильтры === */
+  #filter-bar {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .filter-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #2a2a2a;
+    color: #f0f0f0;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .filter-btn.active {
+    background-color: #4caf50;
+  }
+  
+  /* === Адаптив === */
   @media (max-width: 900px) {
     main {
       grid-template-columns: 1fr;
-      width: 100%;
-      max-width: 600px;
-      margin: 20px auto;
+      grid-template-areas:
+        "calendar"
+        "today-habits"
+        "add-habit"
+        "stats"
+        "archive";
+    }
+  
+    #calendar-list {
+      flex-wrap: wrap;
     }
   
     header {
       flex-direction: column;
-      gap: 10px;
       text-align: center;
+      gap: 10px;
     }
-  
-    #profile {
-      flex-direction: column;
-      gap: 5px;
-    }
-  }
-  
-  /* Чуть больше пространства между секциями */
-  section {
-    margin-bottom: 15px;
-  }
-  
-  /* Ограничим максимальную ширину списка привычек и календаря */
-  #today-habits, #calendar {
-    width: 100%;
-    max-width: 520px;
-    margin: 0 auto;
   }
   
