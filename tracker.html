@@ -2,54 +2,64 @@
 <html lang="ru">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Трекер привычек</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Трекер привычек</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <header>
-        <h1>Трекер привычек</h1>
-        <div id="profile">
-            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" id="profile-img" class="avatar-large">
-            <input type="file" id="avatar-input" accept="image/*" style="display:none;">
-            <span id="user-email"></span>
-            <span id="current-date"></span>
-            <button id="change-avatar-btn">Сменить аватар</button>
-            <button id="logout-btn">Выйти</button>
-        </div>
-    </header>
+  <header>
+    <h1>Трекер привычек</h1>
+    <div id="profile">
+      <span id="user-email"></span>
+      <span id="current-date"></span>
+      <button id="open-menu-btn">☰ Профиль</button>
+    </div>
+  </header>
 
+  <div class="app-container">
     <main>
-        <!-- Сегодняшние привычки -->
-        <section id="today-habits">
-            <h2>Привычки выбранной даты</h2>
-            <ul id="habits"></ul>
-        </section>
+      <!-- Сегодняшние привычки -->
+      <section id="today-habits">
+        <h2>Привычки выбранной даты</h2>
+        <div id="filter-bar">
+          <button class="filter-btn active" data-filter="active">Активные</button>
+          <button class="filter-btn" data-filter="archived">Архив</button>
+          <button class="filter-btn" data-filter="all">Все</button>
+        </div>
+        <ul id="habits"></ul>
+      </section>
 
-        <!-- Добавление привычек -->
-        <section id="add-habit">
-            <input type="text" id="habit-name" placeholder="Новая привычка">
-            <input type="date" id="habit-date">
-            <button id="add-btn">Добавить</button>
-        </section>
+      <!-- Добавление привычек -->
+      <section id="add-habit">
+        <input type="text" id="habit-name" placeholder="Новая привычка">
+        <input type="date" id="habit-date">
+        <button id="add-btn">Добавить</button>
+      </section>
 
-        <!-- Статистика -->
-        <section id="stats">
-            <h2>Статистика</h2>
-            <p>Процент выполнения: <span id="completion">0%</span></p>
-            <p>Streak текущей привычки: <span id="streak">0</span> дней</p>
-        </section>
+      <!-- Статистика -->
+      <section id="stats">
+        <h2>Статистика</h2>
+        <p>Процент выполнения: <span id="completion">0%</span></p>
+        <p>Streak текущей привычки: <span id="streak">0</span> дней</p>
+      </section>
 
-        <!-- Календарь -->
-        <section id="calendar">
-            <h3>Календарь</h3>
-            <ul id="calendar-list"></ul>
-        </section>
+      <!-- Календарь -->
+      <section id="calendar">
+        <h3>Календарь</h3>
+        <ul id="calendar-list"></ul>
+      </section>
+
+      <!-- Архив -->
+      <section id="archive">
+        <h2>Архив привычек</h2>
+        <ul id="archived-habits"></ul>
+      </section>
     </main>
+  </div>
 
-    <script src="tracker.js"></script>
+  <script src="tracker.js"></script>
 </body>
 
 </html>

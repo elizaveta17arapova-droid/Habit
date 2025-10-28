@@ -1,18 +1,98 @@
 /* === Общие стили === */
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #ece9e6, #ffffff);
-    color: #333;
+* {
+    box-sizing: border-box;
     margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  body {
+    background: linear-gradient(135deg, #e3f2fd, #ffffff);
+    color: #333;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
-}
-
-/* === Шапка === */
-header {
-    background-color: #4a90e2;
+  }
+  
+  /* ============================= */
+  /* === СТРАНИЦА РЕГИСТРАЦИИ === */
+  /* ============================= */
+  
+  .container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    padding: 40px 50px;
+    width: 400px;
+    text-align: center;
+    transition: 0.3s ease;
+    margin: auto;
+  }
+  
+  .container:hover {
+    transform: translateY(-4px);
+  }
+  
+  h1,
+  h2 {
+    color: #2b6cb0;
+    margin-bottom: 20px;
+  }
+  
+  input[type="text"],
+  input[type="password"],
+  input[type="email"] {
+    width: 90%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 12px;
+    border: 1px solid #ccd5e0;
+    background: #f9fcff;
+    font-size: 15px;
+    box-shadow: inset 2px 2px 6px #d8e4f0, inset -2px -2px 6px #ffffff;
+  }
+  
+  button {
+    background: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 16px;
+    margin-top: 15px;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(74, 144, 226, 0.3);
+    transition: 0.25s;
+  }
+  
+  button:hover {
+    background: #3a7cd6;
+    transform: scale(1.05);
+  }
+  
+  a {
+    color: #4a90e2;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Центрирование для страницы входа / регистрации */
+  body.auth-page {
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* =========================== */
+  /* === СТРАНИЦА ТРЕКЕРА === */
+  /* =========================== */
+  
+  header {
+    background: #4a90e2;
     color: white;
     width: 100%;
     max-width: 1100px;
@@ -21,34 +101,22 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 15px 25px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-header h1 {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+  }
+  
+  header h1 {
     font-size: 1.6rem;
     margin: 0;
-}
-
-/* === Профиль === */
-#profile {
+  }
+  
+  #profile {
     display: flex;
     align-items: center;
     gap: 12px;
-}
-
-#profile span {
-    font-weight: 600;
-}
-
-.avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #ffffff;
-}
-
-#change-avatar-btn, #logout-btn {
+  }
+  
+  #logout-btn {
     background-color: #ffffff;
     color: #4a90e2;
     border: 1px solid #4a90e2;
@@ -56,15 +124,14 @@ header h1 {
     padding: 6px 14px;
     cursor: pointer;
     transition: 0.3s;
-}
-
-#change-avatar-btn:hover, #logout-btn:hover {
+  }
+  
+  #logout-btn:hover {
     background-color: #4a90e2;
     color: white;
-}
-
-/* === Основной контент === */
-main {
+  }
+  
+  main {
     width: 100%;
     max-width: 1100px;
     margin: 30px auto;
@@ -72,30 +139,31 @@ main {
     grid-template-columns: 1.2fr 0.8fr;
     gap: 25px;
     box-sizing: border-box;
-}
-
-/* === Секции === */
-section {
+  }
+  
+  /* Карточки */
+  section {
     background-color: white;
     border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     padding: 20px;
     box-sizing: border-box;
-}
-
-section h2, section h3 {
+  }
+  
+  section h2,
+  section h3 {
     margin-top: 0;
     color: #4a90e2;
-}
-
-/* === Привычки === */
-#habits {
+  }
+  
+  /* Привычки */
+  #habits {
     list-style: none;
     padding: 0;
     margin: 10px 0;
-}
-
-.habit-item {
+  }
+  
+  #habits li {
     background: #f0f4ff;
     padding: 10px 15px;
     border-radius: 8px;
@@ -103,59 +171,58 @@ section h2, section h3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.habit-item.completed {
+  }
+  
+  #habits li.completed {
     background-color: #d9f7d9;
     text-decoration: line-through;
-}
-
-/* === Календарь === */
-#calendar-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
+  }
+  
+  /* Календарь */
+  #calendar-list {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
     justify-content: center;
     padding: 0;
     list-style: none;
-}
-
-#calendar-list li {
+  }
+  
+  #calendar-list li {
     background-color: #e3ecff;
     border-radius: 6px;
     padding: 8px;
-    width: 36px;
     text-align: center;
     cursor: pointer;
     transition: background-color 0.3s;
-}
-
-#calendar-list li:hover {
+  }
+  
+  #calendar-list li:hover {
     background-color: #c8daff;
-}
-
-#calendar-list li.active {
+  }
+  
+  #calendar-list li.active {
     background-color: #4a90e2;
     color: white;
-}
-
-/* === Добавление привычек === */
-#add-habit {
+  }
+  
+  /* Добавление привычки */
+  #add-habit {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
-}
-
-#add-habit input[type="text"],
-#add-habit input[type="date"] {
+  }
+  
+  #add-habit input[type="text"],
+  #add-habit input[type="date"] {
     padding: 8px 10px;
     border-radius: 6px;
     border: 1px solid #ccc;
     flex: 1;
     min-width: 150px;
-}
-
-#add-btn {
+  }
+  
+  #add-btn {
     background-color: #4a90e2;
     color: white;
     border: none;
@@ -163,30 +230,57 @@ section h2, section h3 {
     padding: 8px 14px;
     cursor: pointer;
     transition: background-color 0.3s;
-}
-
-#add-btn:hover {
+  }
+  
+  #add-btn:hover {
     background-color: #3a7cd6;
-}
-
-/* === Адаптивность === */
-@media (max-width: 900px) {
+  }
+  
+  /* Архив */
+  #archived-habits ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  #archived-habits li {
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 8px;
+    margin-bottom: 5px;
+  }
+  
+  /* === Адаптивность === */
+  @media (max-width: 900px) {
     main {
-        grid-template-columns: 1fr;
-        gap: 20px;
-        width: 100%;
-        max-width: 600px;
-        margin: 20px auto;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      width: 100%;
+      max-width: 600px;
+      margin: 20px auto;
     }
-
+  
+    header {
+      flex-direction: column;
+      gap: 10px;
+      text-align: center;
+    }
+  
     #profile {
-        flex-direction: column;
-        gap: 6px;
-        align-items: center;
+      flex-direction: column;
+      gap: 6px;
     }
-
-    #calendar-list li {
-        width: 30px;
-        padding: 6px;
+  
+    #calendar-list {
+      grid-template-columns: repeat(4, 1fr);
     }
-}
+  }
+  /* Центрирование страницы авторизации */
+body.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #e3f2fd, #ffffff);
+  }
+  
