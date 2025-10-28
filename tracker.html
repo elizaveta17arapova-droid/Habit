@@ -12,9 +12,20 @@
   <header>
     <h1>Трекер привычек</h1>
     <div id="profile">
+      <img id="profile-img" class="avatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Аватар">
       <span id="user-email"></span>
       <span id="current-date"></span>
-      <button id="open-menu-btn">☰ Профиль</button>
+      <button id="profile-menu-btn">☰ Профиль</button>
+
+      <!-- Выпадающее меню -->
+      <div id="profile-menu" class="profile-menu" style="display:none;">
+        <h3>Профиль</h3>
+        <img id="menu-avatar" class="avatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Аватар">
+        <input type="file" id="avatar-input" accept="image/*" style="display:none;">
+        <button id="change-avatar-btn">Сменить аватар</button>
+        <p>Email: <span id="menu-email"></span></p>
+        <button id="logout-btn">Выйти</button>
+      </div>
     </div>
   </header>
 

@@ -17,12 +17,27 @@ const calendarList = document.getElementById('calendar-list');
 const completionEl = document.getElementById('completion');
 const streakEl = document.getElementById('streak');
 
+// Профиль
+const profileMenuBtn = document.getElementById('profile-menu-btn');
+const profileMenu = document.getElementById('profile-menu');
+const profileImg = document.getElementById('profile-img');
+const menuAvatar = document.getElementById('menu-avatar');
+const menuEmail = document.getElementById('menu-email');
+const avatarInput = document.getElementById('avatar-input');
+const changeAvatarBtn = document.getElementById('change-avatar-btn');
+
 // Профиль и текущая дата
 userEmail.textContent = currentUser.email;
+menuEmail.textContent = currentUser.email;
 const today = new Date();
 const todayStr = today.toISOString().split('T')[0];
 currentDateEl.textContent = today.toLocaleDateString();
 habitDateInput.value = todayStr;
+
+if(currentUser.avatar){
+    profileImg.src = currentUser.avatar;
+    menuAvatar.src = currentUser.avatar;
+}
 
 // Загружаем привычки пользователя
 let habits = JSON.parse(localStorage.getItem('habits_' + currentUser.email)) || [];
@@ -118,12 +133,6 @@ function deleteHabit(index) {
     }
 }
 
-// ----------------- Выход -----------------
-logoutBtn.addEventListener('click', () => {
-    localStorage.removeItem('currentUser');
-    window.location.href = 'index.html';
-});
-
 // ----------------- Календарь -----------------
 function renderCalendar() {
     calendarList.innerHTML = '';
@@ -133,7 +142,6 @@ function renderCalendar() {
         const li = document.createElement('li');
         li.textContent = i;
 
-        // Подсветка, если есть привычки
         if (habits.some(h => h.date === dateStr)) {
             li.style.backgroundColor = '#a0e7a0';
         }
@@ -160,7 +168,6 @@ function updateStats() {
     const percent = total === 0 ? 0 : Math.round((done / total) * 100);
     completionEl.textContent = percent + '%';
 
-    // Streak: последовательные дни с выполнением всех привычек
     let streakCount = 0;
     let checkDate = new Date(selectedDate);
     while (true) {
@@ -173,4 +180,31 @@ function updateStats() {
         checkDate.setDate(checkDate.getDate() - 1);
     }
     streakEl.textContent = streakCount;
-}  
+}
+
+// ----------------- Меню профиля -----------------
+profileMenuBtn.addEventListener('click', () => {
+  profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
+});
+
+changeAvatarBtn.addEventListener('click', () => avatarInput.click());
+
+avatarInput.addEventListener('change', e => {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = event => {
+    const imageData = event.target.result;
+    profileImg.src = imageData;
+    menuAvatar.src = imageData;
+    currentUser.avatar = imageData;
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+  };
+  reader.readAsDataURL(file);
+});
+
+// ----------------- Выход -----------------
+logoutBtn.addEventListener('click', () => {
+  localStorage.removeItem('currentUser');
+  window.location.href = 'index.html';
+});
