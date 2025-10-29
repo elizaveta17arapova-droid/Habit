@@ -268,20 +268,21 @@ profileMenuBtn.addEventListener('click', () => {
 });
 
 changeAvatarBtn.addEventListener('click', () => avatarInput.click());
-
-avatarInput.addEventListener('change', e => {
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = event => {
-    const imageData = event.target.result;
-    profileImg.src = imageData;
-    menuAvatar.src = imageData;
-    currentUser.avatar = imageData;
-    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-  };
-  reader.readAsDataURL(file);
-});
+// Загружаем аватар
+if(currentUser.avatar){
+    profileImg.src = currentUser.avatar;
+    menuAvatar.src = currentUser.avatar;
+} else {
+    // если avatar нет в currentUser, берём из отдельного ключа "avatar"
+    const savedAvatar = localStorage.getItem("avatar");
+    if(savedAvatar){
+        profileImg.src = savedAvatar;
+        menuAvatar.src = savedAvatar;
+        // обновляем currentUser, чтобы на будущее не было пусто
+        currentUser.avatar = savedAvatar;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    }
+}
 
 // ----------------- Выход -----------------
 logoutBtn.addEventListener('click', () => {

@@ -27,20 +27,32 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   
     avatarUpload.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          avatarImg.style.opacity = 0;
-          setTimeout(() => {
-            avatarImg.src = reader.result;
-            avatarImg.style.opacity = 1;
-            localStorage.setItem("avatar", reader.result);
-          }, 150);
-        };
-        reader.readAsDataURL(file);
-      }
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                avatarImg.style.opacity = 0;
+                setTimeout(() => {
+                    const imageData = reader.result;
+                    avatarImg.src = imageData;
+                    avatarImg.style.opacity = 1;
+    
+                    // === Сохраняем аватар для редактирования профиля ===
+                    localStorage.setItem("avatar", imageData);
+    
+                    // === Обновляем текущего пользователя для трекера ===
+                    const currentUserStr = localStorage.getItem("currentUser");
+                    if (currentUserStr) {
+                        const currentUser = JSON.parse(currentUserStr);
+                        currentUser.avatar = imageData; // обновляем аватар
+                        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+                    }
+                }, 150);
+            };
+            reader.readAsDataURL(file);
+        }
     });
+    
   
     // === Сохранение данных профиля ===
     document.getElementById("edit-profile-form").addEventListener("submit", (e) => {
