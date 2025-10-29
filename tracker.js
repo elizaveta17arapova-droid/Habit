@@ -136,15 +136,32 @@ function deleteHabit(index) {
 // ----------------- Календарь -----------------
 function renderCalendar() {
     calendarList.innerHTML = '';
-    const monthDays = new Date(today.getFullYear(), today.getMonth()+1, 0).getDate();
+    const monthDays = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+
     for (let i = 1; i <= monthDays; i++) {
-        const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+        const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
         const li = document.createElement('li');
         li.textContent = i;
 
-        if (habits.some(h => h.date === dateStr)) {
-            li.style.backgroundColor = '#a0e7a0';
+        const dayHabits = habits.filter(h => h.date === dateStr);
+        const total = dayHabits.length;
+        const done = dayHabits.filter(h => h.done).length;
+        const percent = total === 0 ? 0 : Math.round((done / total) * 100);
+
+        // 🎨 Определяем цвет в зависимости от процента выполнения
+        if (total > 0) {
+            if (percent === 0) {
+                li.style.backgroundColor = '#ffb3b3'; // красный (ничего не выполнено)
+            } else if (percent < 70) {
+                li.style.backgroundColor = '#fff3b3'; // желтый (частично выполнено)
+            } else {
+                li.style.backgroundColor = '#a0e7a0'; // зеленый (выполнено >70%)
+            }
+        } else {
+            li.style.backgroundColor = '#e3ecff'; // базовый фон — нет привычек
         }
+
+        // Выделяем выбранную дату
         if (dateStr === selectedDate) {
             li.style.border = '2px solid #333';
         }
