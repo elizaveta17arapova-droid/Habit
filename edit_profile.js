@@ -14,6 +14,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // === Загружаем сохранённый аватар ===
     const savedAvatar = localStorage.getItem("avatar");
     if (savedAvatar) avatarImg.src = savedAvatar;
+
+    // === Плавная анимация при смене аватара ===
+    avatarImg.style.transition = "0.3s ease-in-out";
+  
+    // === Подсказка при наведении на аватар ===
+    avatarImg.title = "Нажмите кнопку 'Сменить аватар', чтобы изменить изображение";
   
     // === Выбор нового аватара ===
     changeAvatarBtn.addEventListener("click", () => {
@@ -25,8 +31,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (file) {
         const reader = new FileReader();
         reader.onload = () => {
-          avatarImg.src = reader.result;
-          localStorage.setItem("avatar", reader.result);
+          avatarImg.style.opacity = 0;
+          setTimeout(() => {
+            avatarImg.src = reader.result;
+            avatarImg.style.opacity = 1;
+            localStorage.setItem("avatar", reader.result);
+          }, 150);
         };
         reader.readAsDataURL(file);
       }
@@ -50,6 +60,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("lifestyle-settings").addEventListener("click", () => {
       alert("🧘 Раздел настроек образа жизни в разработке");
     });
-  });
-  
-  
+
+    // === Подсказки и эффект наведения для дополнительных кнопок ===
+    const extraBtns = [document.getElementById("account-info"), document.getElementById("lifestyle-settings")];
+    extraBtns.forEach(btn => {
+        btn.addEventListener("mouseenter", () => btn.style.backgroundColor = "#357abd");
+        btn.addEventListener("mouseleave", () => btn.style.backgroundColor = "#4a90e2");
+    });
+});
