@@ -15,6 +15,12 @@
   </header>
 
   <main class="edit-profile-main">
+    <div class="avatar-edit-container">
+      <img id="edit-avatar" src="img/default-avatar.png" alt="Avatar" class="avatar" />
+      <input type="file" id="avatar-upload" accept="image/*" hidden />
+      <button id="change-avatar" class="profile-btn">Сменить аватар</button>
+    </div>
+
     <form id="edit-profile-form" class="edit-profile-form">
       <div class="form-group">
         <label for="first-name">Имя:</label>

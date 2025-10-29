@@ -19,8 +19,13 @@
         <div class="profile-container">
             <div class="profile-card">
                 <img id="avatar" src="img/default-avatar.png" alt="Avatar" class="avatar" />
+                
+                <!-- скрытый инпут для загрузки нового изображения -->
+                <input type="file" id="avatar-upload" accept="image/*" hidden />
+                
                 <button id="edit-profile-btn" class="profile-btn">Редактировать профиль</button>
                 <button id="change-avatar-btn">Сменить аватар</button>
+
                 <p><strong>Email:</strong> <span id="user-email"></span></p>
             </div>
 
@@ -48,7 +53,65 @@
 
     <!-- JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="profile.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const emailSpan = document.getElementById("user-email");
+            const userEmail = localStorage.getItem("userEmail") || "user@example.com";
+            if (emailSpan) emailSpan.textContent = userEmail;
+
+            // === Загружаем сохранённый аватар ===
+            const avatarImg = document.getElementById("avatar");
+            const savedAvatar = localStorage.getItem("avatar");
+            if (savedAvatar) avatarImg.src = savedAvatar;
+
+            // === Смена аватара ===
+            const avatarUpload = document.getElementById("avatar-upload");
+            const changeAvatarBtn = document.getElementById("change-avatar-btn");
+
+            changeAvatarBtn.addEventListener("click", () => avatarUpload.click());
+
+            avatarUpload.addEventListener("change", (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        avatarImg.src = reader.result;
+                        localStorage.setItem("avatar", reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // === Кнопка "Редактировать профиль" ===
+            document.getElementById("edit-profile-btn")?.addEventListener("click", () => {
+                window.location.href = "edit_profile.html";
+            });
+
+            // === Диаграмма ===
+            const ctx = document.getElementById("reportChart").getContext("2d");
+            new Chart(ctx, {
+                type: "doughnut",
+                data: {
+                    labels: ["Выполнено", "В процессе", "Пропущено"],
+                    datasets: [
+                        {
+                            data: [65, 25, 10],
+                            backgroundColor: ["#4a90e2", "#a3c4f3", "#f8c8dc"],
+                            borderWidth: 2,
+                        },
+                    ],
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            position: "bottom",
+                            labels: { color: "#333" },
+                        },
+                    },
+                },
+            });
+        });
+    </script>
 </body>
 
 </html>

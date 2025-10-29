@@ -513,3 +513,38 @@ body.auth-page {
   border-top: 1px solid #ccc;
   padding-top: 15px;
 }
+/* ===== Стили аватара и анимации ===== */
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+}
+
+.avatar.animate {
+  transform: scale(1.1);
+  opacity: 0.6;
+}
+
+.avatar.animate-done {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Кнопка для смены аватара */
+#change-avatar-btn {
+  margin-top: 10px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#change-avatar-btn:hover {
+  background-color: #357abd;
+}
