@@ -15,7 +15,7 @@
       <img id="profile-img" class="avatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Аватар">
       <span id="user-email"></span>
       <span id="current-date"></span>
-      <a href="profile.html" id="profile-menu-btn">☰ Профиль</a>
+      <a href="profile.html" id="profile-menu-btn">☰ Настройки</a>
 
 
       <!-- Выпадающее меню -->
@@ -64,10 +64,18 @@
       </section>
 
       <!-- Архив -->
-      <section id="archive">
-        <h2>Архив привычек</h2>
-        <ul id="archived-habits"></ul>
-      </section>
+     <section id="archive">
+  <h2>Архив привычек</h2>
+  
+  <div id="archive-filters">
+    <button class="archive-filter active" data-filter="all">Все</button>
+    <button class="archive-filter" data-filter="done">✅ Выполненные</button>
+    <button class="archive-filter" data-filter="active">🕓 Активные</button>
+  </div>
+
+  <ul id="archived-habits"></ul>
+</section>
+
     </main>
   </div>
 

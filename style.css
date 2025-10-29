@@ -461,3 +461,26 @@ body.auth-page {
     width: 90%;
   }
 }
+#archive-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.archive-filter {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.archive-filter.active {
+  background-color: #2b6cb0;
+}
+
+.archive-filter:hover {
+  background-color: #3a7cd6;
+}

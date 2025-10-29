@@ -171,6 +171,7 @@ function renderCalendar() {
             habitDateInput.value = dateStr;
             renderHabits();
             renderCalendar();
+            renderArchive();
         });
 
         calendarList.appendChild(li);
@@ -198,6 +199,68 @@ function updateStats() {
     }
     streakEl.textContent = streakCount;
 }
+// ----------------- Архив привычек -----------------
+const archiveList = document.getElementById('archived-habits');
+const archiveFilters = document.querySelectorAll('.archive-filter');
+let archiveFilter = 'all'; // текущий фильтр
+
+// Обновление архива
+function renderArchive() {
+    archiveList.innerHTML = '';
+
+    let filteredHabits = habits;
+
+    // Фильтрация по статусу
+    if (archiveFilter === 'done') {
+        filteredHabits = habits.filter(h => h.done);
+    } else if (archiveFilter === 'active') {
+        filteredHabits = habits.filter(h => !h.done);
+    }
+
+    if (filteredHabits.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = 'Нет привычек для отображения';
+        li.style.color = '#888';
+        archiveList.appendChild(li);
+        return;
+    }
+
+    // Группируем по дате
+    const grouped = {};
+    filteredHabits.forEach(h => {
+        if (!grouped[h.date]) grouped[h.date] = [];
+        grouped[h.date].push(h);
+    });
+
+    // Выводим по датам
+    Object.keys(grouped).sort().forEach(date => {
+        const dateHeader = document.createElement('h4');
+        dateHeader.textContent = new Date(date).toLocaleDateString('ru-RU');
+        dateHeader.style.marginTop = '10px';
+        dateHeader.style.color = '#4a90e2';
+        archiveList.appendChild(dateHeader);
+
+        grouped[date].forEach(habit => {
+            const li = document.createElement('li');
+            li.textContent = habit.name + (habit.done ? ' ✅' : ' ❌');
+            li.style.background = habit.done ? '#d9f7d9' : '#f9d9d9';
+            li.style.borderRadius = '6px';
+            li.style.marginBottom = '4px';
+            li.style.padding = '6px 10px';
+            archiveList.appendChild(li);
+        });
+    });
+}
+
+// Обработка фильтров архива
+archiveFilters.forEach(btn => {
+    btn.addEventListener('click', () => {
+        archiveFilters.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        archiveFilter = btn.dataset.filter;
+        renderArchive();
+    });
+});
 
 // ----------------- Меню профиля -----------------
 profileMenuBtn.addEventListener('click', () => {
