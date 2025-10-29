@@ -54,6 +54,10 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href =
             "mailto:support@habitapp.com?subject=Обратная%20связь";
     });
+// === Переход на страницу редактирования профиля ===
+document.getElementById("edit-profile-btn")?.addEventListener("click", () => {
+    window.location.href = "edit_profile.html";
+});
 
     // === Диаграмма отчетности ===
     const ctx = document.getElementById("reportChart").getContext("2d");
