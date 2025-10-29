@@ -1,11 +1,13 @@
-// === profile.js ===
-
 document.addEventListener("DOMContentLoaded", () => {
-    const emailSpan = document.getElementById("user-email");
-    const userEmail = localStorage.getItem("userEmail") || "user@example.com";
-    if (emailSpan) emailSpan.textContent = userEmail;
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser) return;
 
-    // === Универсальная функция уведомлений ===
+    const emailSpan = document.getElementById("user-email");
+    emailSpan.textContent = currentUser.email;
+
+    const avatarImg = document.getElementById("avatar");
+    if (currentUser.avatar) avatarImg.src = currentUser.avatar;
+
     function showNotification(text) {
         const note = document.createElement("div");
         note.className = "custom-alert";
@@ -18,68 +20,55 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 2000);
     }
 
-    // === Сменить аватар ===
-    document.getElementById("change-avatar-btn")?.addEventListener("click", () => {
-        showNotification("Функция смены аватара появится скоро 😊");
+    // Смена аватара
+    const avatarUpload = document.getElementById("avatar-upload");
+    const changeAvatarBtn = document.getElementById("change-avatar-btn");
+    changeAvatarBtn.addEventListener("click", () => avatarUpload.click());
+    avatarUpload.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+            avatarImg.src = reader.result;
+            currentUser.avatar = reader.result;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            localStorage.setItem("avatar", reader.result);
+            showNotification("Аватар успешно изменен! ✅");
+        };
+        reader.readAsDataURL(file);
     });
 
-    // === Уведомления ===
+    // Редактирование профиля
+    document.getElementById("edit-profile-btn")?.addEventListener("click", () => {
+        window.location.href = "edit_profile.html";
+    });
+
+    // Уведомления (реальное количество невыполненных привычек)
     document.getElementById("notifications")?.addEventListener("click", () => {
-        showNotification("🔔 Раздел уведомлений пока не активен");
+        const habits = JSON.parse(localStorage.getItem('habits_' + currentUser.email)) || [];
+        const incompleteCount = habits.filter(h => !h.done).length;
+        showNotification(`🔔 У вас осталось ${incompleteCount} невыполненных привычек`);
     });
 
-    // === Общие настройки ===
-    document.getElementById("settings")?.addEventListener("click", () => {
-        showNotification("⚙️ Здесь будут общие настройки профиля");
-    });
-
-    // === Языковые параметры ===
-    document.getElementById("language")?.addEventListener("click", () => {
-        showNotification("🌐 Возможность смены языка появится позже");
-    });
-
-    // === Поделиться с друзьями ===
+    // Поделиться ссылкой
     document.getElementById("share")?.addEventListener("click", () => {
         navigator.clipboard.writeText(window.location.href);
         showNotification("🔗 Ссылка на сайт скопирована!");
     });
 
-    // === Оцените нас ===
-    document.getElementById("rate")?.addEventListener("click", () => {
-        showNotification("⭐ Спасибо за вашу поддержку!");
-    });
-
-    // === Обратная связь ===
-    document.getElementById("feedback")?.addEventListener("click", () => {
-        window.location.href =
-            "mailto:support@habitapp.com?subject=Обратная%20связь";
-    });
-// === Переход на страницу редактирования профиля ===
-document.getElementById("edit-profile-btn")?.addEventListener("click", () => {
-    window.location.href = "edit_profile.html";
-});
-
-    // === Диаграмма отчетности ===
-    const ctx = document.getElementById("reportChart").getContext("2d");
-    new Chart(ctx, {
-        type: "doughnut",
-        data: {
-            labels: ["Выполнено", "В процессе", "Пропущено"],
-            datasets: [
-                {
-                    data: [65, 25, 10],
-                    backgroundColor: ["#4a90e2", "#a3c4f3", "#f8c8dc"],
-                    borderWidth: 2,
-                },
-            ],
-        },
-        options: {
-            plugins: {
-                legend: {
-                    position: "bottom",
-                    labels: { color: "#333" },
-                },
-            },
-        },
+    // Переключение темы
+    const themeToggle = document.getElementById("theme-toggle");
+    const savedTheme = localStorage.getItem("theme") || "light";
+    document.body.classList.add(savedTheme);
+    themeToggle?.addEventListener("click", () => {
+        if (document.body.classList.contains("light")) {
+            document.body.classList.replace("light", "dark");
+            localStorage.setItem("theme", "dark");
+            showNotification("🌙 Темная тема включена");
+        } else {
+            document.body.classList.replace("dark", "light");
+            localStorage.setItem("theme", "light");
+            showNotification("☀️ Светлая тема включена");
+        }
     });
 });

@@ -19,10 +19,10 @@
         <div class="profile-container">
             <div class="profile-card">
                 <img id="avatar" src="img/default-avatar.png" alt="Avatar" class="avatar" />
-                
+
                 <!-- скрытый инпут для загрузки нового изображения -->
                 <input type="file" id="avatar-upload" accept="image/*" hidden />
-                
+
                 <button id="edit-profile-btn" class="profile-btn">Редактировать профиль</button>
                 <button id="change-avatar-btn">Сменить аватар</button>
 
@@ -32,11 +32,8 @@
             <!-- Кнопки действий -->
             <div class="profile-options">
                 <button id="notifications" class="option-btn">🔔 Уведомления</button>
-                <button id="settings" class="option-btn">⚙️ Общие настройки</button>
-                <button id="language" class="option-btn">🌐 Языковые параметры</button>
                 <button id="share" class="option-btn">🔗 Поделиться с друзьями</button>
-                <button id="rate" class="option-btn">⭐ Оцените нас</button>
-                <button id="feedback" class="option-btn">✏️ Обратная связь</button>
+                <button id="theme-toggle" class="option-btn">🌓 Темная/Светлая тема</button>
             </div>
         </div>
 
@@ -109,6 +106,33 @@
                         },
                     },
                 },
+            });
+
+            // === Уведомления ===
+            document.getElementById("notifications")?.addEventListener("click", () => {
+                const incomplete = parseInt(localStorage.getItem("incompleteHabits")) || 3;
+                alert(`У вас осталось ${incomplete} невыполненных привычек`);
+            });
+
+            // === Поделиться с друзьями ===
+            document.getElementById("share")?.addEventListener("click", () => {
+                navigator.clipboard.writeText(window.location.href);
+                alert("Ссылка на сайт скопирована!");
+            });
+
+            // === Переключение темы ===
+            const themeToggle = document.getElementById("theme-toggle");
+            const savedTheme = localStorage.getItem("theme") || "light";
+            document.body.classList.add(savedTheme);
+
+            themeToggle.addEventListener("click", () => {
+                if (document.body.classList.contains("light")) {
+                    document.body.classList.replace("light", "dark");
+                    localStorage.setItem("theme", "dark");
+                } else {
+                    document.body.classList.replace("dark", "light");
+                    localStorage.setItem("theme", "light");
+                }
             });
         });
     </script>

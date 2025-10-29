@@ -34,7 +34,7 @@ const todayStr = today.toISOString().split('T')[0];
 currentDateEl.textContent = today.toLocaleDateString();
 habitDateInput.value = todayStr;
 
-if(currentUser.avatar){
+if (currentUser.avatar) {
     profileImg.src = currentUser.avatar;
     menuAvatar.src = currentUser.avatar;
 }
@@ -264,18 +264,18 @@ archiveFilters.forEach(btn => {
 
 // ----------------- Меню профиля -----------------
 profileMenuBtn.addEventListener('click', () => {
-  profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
+    profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
 });
 
 changeAvatarBtn.addEventListener('click', () => avatarInput.click());
 // Загружаем аватар
-if(currentUser.avatar){
+if (currentUser.avatar) {
     profileImg.src = currentUser.avatar;
     menuAvatar.src = currentUser.avatar;
 } else {
     // если avatar нет в currentUser, берём из отдельного ключа "avatar"
     const savedAvatar = localStorage.getItem("avatar");
-    if(savedAvatar){
+    if (savedAvatar) {
         profileImg.src = savedAvatar;
         menuAvatar.src = savedAvatar;
         // обновляем currentUser, чтобы на будущее не было пусто
@@ -286,6 +286,31 @@ if(currentUser.avatar){
 
 // ----------------- Выход -----------------
 logoutBtn.addEventListener('click', () => {
-  localStorage.removeItem('currentUser');
-  window.location.href = 'index.html';
+    localStorage.removeItem('currentUser');
+    window.location.href = 'index.html';
 });
+
+
+// ===== Переключение темы =====
+const themeToggleBtn = document.createElement('button');
+themeToggleBtn.textContent = '🌓 Темная/Светлая тема';
+themeToggleBtn.style.marginLeft = '10px';
+document.querySelector('header').appendChild(themeToggleBtn);
+
+const savedTheme = localStorage.getItem('theme') || 'light';
+document.body.classList.add(savedTheme);
+
+themeToggleBtn.addEventListener('click', () => {
+    if (document.body.classList.contains('light')) {
+        document.body.classList.replace('light', 'dark');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.body.classList.replace('dark', 'light');
+        localStorage.setItem('theme', 'light');
+    }
+    // Перерисуем архив и календарь, чтобы цвета элементов тоже сменились
+    renderArchive();
+    renderCalendar();
+    renderHabits();
+});
+
