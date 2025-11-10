@@ -63,9 +63,19 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = "profile.html";
   });
 
-  // === Кнопки дополнительных разделов ===
+  // === Кнопка "Сведения учетной записи" (новый код) ===
   document.getElementById("account-info").addEventListener("click", () => {
-      alert("📄 Здесь будет информация об учетной записи");
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      if (!currentUser) {
+          alert("Сначала войдите в систему");
+          window.location.href = "index.html";
+          return;
+      }
+      // Сохраняем данные для страницы account_info
+      localStorage.setItem("accountInfo_email", currentUser.email || "");
+      localStorage.setItem("accountInfo_id", currentUser.id || "");
+      // Переходим на страницу account_info.html
+      window.location.href = "account_info.html";
   });
 
   // === Переход в настройки образа жизни ===

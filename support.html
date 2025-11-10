@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Служба поддержки</title>
+<link rel="stylesheet" href="style.css" />
+<style>
+  body { font-family: Arial, sans-serif; background: #f4f6f8; margin:0; padding:0; }
+  .support-container { max-width: 600px; margin: 40px auto; padding: 24px; background:#fff; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.08);}
+  h1 { color:#2b6cb0; text-align:center; margin-bottom: 20px; }
+  label { color:#4a90e2; font-weight:600; margin-bottom:6px; display:block; }
+  textarea { width: 100%; padding: 10px; border-radius: 10px; border:1px solid #ccd5e0; margin-bottom: 12px; resize: vertical; }
+  button { background:#4a90e2; color:#fff; padding:10px 16px; border:none; border-radius:10px; cursor:pointer; margin-right: 10px; }
+  button.secondary { background:#f0f4ff; color:#2b6cb0; border:1px solid #dbe9ff; }
+  ul { padding-left: 20px; margin-top: 12px; }
+  li { margin-bottom: 6px; background: #f9fcff; padding:6px 10px; border-radius:6px; border:1px solid #dbe9ff; }
+  .user-info { margin-bottom: 20px; font-size: 14px; color:#333; }
+  a.back-link { display:inline-block; margin-bottom: 20px; color:#4a90e2; text-decoration:none; font-weight:600; }
+  a.back-link:hover { text-decoration:underline; }
+</style>
+</head>
+<body>
+  <div class="support-container">
+    <a href="edit_profile.html" class="back-link">← Назад</a>
+    <h1>Служба поддержки</h1>
+
+    <div class="user-info" id="user-info">
+      <!-- Здесь будет email и ID пользователя -->
+    </div>
+
+    <form id="support-form">
+      <label for="request">Ваш запрос:</label>
+      <textarea id="request" rows="4" placeholder="Опишите проблему..." required></textarea>
+      <div style="text-align:center; margin-top:10px;">
+        <button type="submit">Отправить</button>
+      </div>
+    </form>
+
+    <h3>История запросов:</h3>
+    <ul id="request-history"></ul>
+
+    <div style="margin-top:12px; font-size:14px; color:#666;">
+      Если нужна помощь с учетной записью, напишите нам. <a href="mailto:support@example.com">Связаться с поддержкой</a>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const userInfoEl = document.getElementById("user-info");
+      const form = document.getElementById("support-form");
+      const requestInput = document.getElementById("request");
+      const historyList = document.getElementById("request-history");
+
+      // Получаем текущего пользователя
+      let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+      if (!currentUser.id) {
+        // Если ID нет, создаём случайный
+        currentUser.id = Math.floor(100000 + Math.random() * 900000); // 6-значное число
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+      }
+
+      userInfoEl.innerHTML = `<strong>Email:</strong> ${currentUser.email || "не указан"}<br><strong>ID пользователя:</strong> ${currentUser.id}`;
+
+      // Загружаем историю из localStorage
+      let history = JSON.parse(localStorage.getItem("supportRequests")) || [];
+
+      function renderHistory() {
+        historyList.innerHTML = "";
+        if (history.length === 0) {
+          historyList.innerHTML = "<li>Нет запросов</li>";
+          return;
+        }
+        history.forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = `${item.date} — ${item.text}`;
+          historyList.appendChild(li);
+        });
+      }
+
+      renderHistory();
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const text = requestInput.value.trim();
+        if (!text) return;
+
+        const newRequest = { text, date: new Date().toLocaleString() };
+        history.push(newRequest);
+        localStorage.setItem("supportRequests", JSON.stringify(history));
+
+        requestInput.value = "";
+        renderHistory();
+        alert("✅ Ваш запрос отправлен и сохранён в истории!");
+      });
+    });
+  </script>
+</body>
+</html>

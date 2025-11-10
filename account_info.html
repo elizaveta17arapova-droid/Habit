@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Сведения учетной записи</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f8ff; margin:0; padding:0; }
+    header { background: #4a90e2; color: white; padding: 16px; text-align: center; }
+    header a { color: white; text-decoration: none; font-size: 14px; display:block; margin-top:4px; }
+    main { max-width: 600px; margin: 40px auto; background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+    h1 { color: #2b6cb0; text-align:center; margin-bottom: 24px; }
+    .info-group { margin-bottom: 16px; }
+    .info-label { font-weight: 600; color: #4a90e2; margin-bottom: 4px; display:block; }
+    .info-value { font-size: 16px; color: #333; }
+    .support-link { display:inline-block; margin-top:20px; padding:10px 16px; background:#4a90e2; color:white; border-radius:10px; text-decoration:none; transition:0.3s; }
+    .support-link:hover { background:#357abd; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📄 Сведения учетной записи</h1>
+    <a href="edit_profile.html">← Назад</a>
+  </header>
+
+  <main>
+    <div class="info-group">
+      <span class="info-label">Электронная почта:</span>
+      <span id="user-email" class="info-value">loading...</span>
+    </div>
+
+    <div class="info-group">
+      <span class="info-label">ID пользователя:</span>
+      <span id="user-id" class="info-value">loading...</span>
+    </div>
+
+    <div class="info-group">
+      <span class="info-label">Помощь с учетной записью:</span>
+      <a href="support.html" class="support-link">📩 Связаться с поддержкой</a>
+    </div>
+  </main>
+
+  <script src="account_info.js"></script>
+</body>
+</html>
