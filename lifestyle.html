@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Настройки образа жизни</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Небольшие локальные правки для аккуратной карточки (можешь переместить в style.css) */
+    .lifestyle-container { max-width: 600px; margin: 40px auto; padding: 24px; background:#fff; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.08); }
+    .lifestyle-container h1 { color:#2b6cb0; margin-bottom:12px; text-align:center; }
+    .lifestyle-row { display:flex; gap:16px; flex-wrap:wrap; }
+    .lifestyle-field { flex:1 1 280px; display:flex; flex-direction:column; margin-bottom:12px; }
+    .lifestyle-field label { color:#4a90e2; font-weight:600; margin-bottom:6px; }
+    .lifestyle-field input { padding:10px;border-radius:10px;border:1px solid #ccd5e0;background:#f9fcff; }
+    .hint { font-size:13px; color:#666; margin-top:6px; }
+    .lifestyle-actions { display:flex; gap:12px; justify-content:center; margin-top:18px; }
+    .btn { background:#4a90e2;color:#fff;padding:10px 16px;border-radius:10px;border:none;cursor:pointer; }
+    .btn.secondary { background:#f0f4ff;color:#2b6cb0;border:1px solid #dbe9ff; }
+    @media (max-width:520px){ .lifestyle-row{flex-direction:column} }
+  </style>
+</head>
+<body>
+  <header class="profile-header">
+    <h1>Настройки образа жизни</h1>
+    <a href="edit_profile.html" class="back-link">← Назад</a>
+  </header>
+
+  <main>
+    <div class="lifestyle-container">
+      <form id="lifestyle-form">
+        <div class="lifestyle-row">
+          <div class="lifestyle-field">
+            <label for="sleep-hours">Норма сна (часы)</label>
+            <input id="sleep-hours" type="number" min="0" max="24" step="0.5" placeholder="Например, 8" />
+            <div class="hint">Большинству людей нужно 7–9 часов для полноценного сна.</div>
+          </div>
+
+          <div class="lifestyle-field">
+            <label for="water-liters">Норма воды (литров/день)</label>
+            <input id="water-liters" type="number" min="0" step="0.1" placeholder="Например, 2.0" />
+            <div class="hint">Рекомендуется ~1.5–3.0 л (зависит от веса и активности).</div>
+          </div>
+        </div>
+
+        <div class="lifestyle-row">
+          <div class="lifestyle-field">
+            <label for="step-goal">Цель по шагам (шагов/день)</label>
+            <input id="step-goal" type="number" min="0" step="100" placeholder="Например, 8000" />
+            <div class="hint">Частая цель — 7000–10000 шагов в день.</div>
+          </div>
+
+          <div class="lifestyle-field">
+            <label for="calorie-goal">Норма калорий (ккал/день)</label>
+            <input id="calorie-goal" type="number" min="0" step="50" placeholder="Например, 2000" />
+            <div class="hint">Норма зависит от возраста, пола и активности; ориентир — 2000 ккал.</div>
+          </div>
+        </div>
+
+        <div class="lifestyle-row">
+          <div class="lifestyle-field">
+            <label for="weight">Вес (кг)</label>
+            <input id="weight" type="number" min="0" step="0.1" placeholder="Например, 70" />
+          </div>
+
+          <div class="lifestyle-field">
+            <label for="height">Рост (см)</label>
+            <input id="height" type="number" min="0" step="0.1" placeholder="Например, 175" />
+          </div>
+        </div>
+
+        <div style="margin-top:12px; font-size:14px; color:#666;">
+          <strong>Совет:</strong> Эти настройки помогают приложению давать рекомендации и напоминания.
+        </div>
+
+        <div class="lifestyle-actions">
+          <button class="btn" type="submit">Сохранить</button>
+          <button class="btn secondary" id="reset-btn" type="button">Сбросить</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script src="lifestyle.js"></script>
+</body>
+</html>
