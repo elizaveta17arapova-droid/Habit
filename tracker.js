@@ -314,3 +314,163 @@ themeToggleBtn.addEventListener('click', () => {
     renderHabits();
 });
 
+// ================== 💧 Напоминание пить воду ==================
+(function waterReminder() {
+    // Норма воды в день (в мл)
+    const WATER_GOAL = 2000;
+
+    // Загружаем текущий прогресс воды из localStorage
+    let waterDrunk = parseInt(localStorage.getItem('waterDrunk') || '0');
+
+    // Если блока нет — создаём уведомление
+    let reminder = document.createElement('div');
+    reminder.id = 'water-reminder';
+    reminder.style.position = 'fixed';
+    reminder.style.bottom = '20px';
+    reminder.style.right = '20px';
+    reminder.style.background = '#4a90e2';
+    reminder.style.color = 'white';
+    reminder.style.padding = '12px 18px';
+    reminder.style.borderRadius = '12px';
+    reminder.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+    reminder.style.zIndex = '9999';
+    reminder.style.transition = '0.3s ease';
+    reminder.style.cursor = 'pointer';
+    reminder.textContent = `💧 Выпей воды! (${waterDrunk}/${WATER_GOAL} мл)`;
+    document.body.appendChild(reminder);
+
+    // Клик по уведомлению — добавляем 200 мл
+    reminder.addEventListener('click', () => {
+        waterDrunk += 200;
+        if (waterDrunk > WATER_GOAL) waterDrunk = WATER_GOAL;
+        localStorage.setItem('waterDrunk', waterDrunk);
+        reminder.textContent = `💧 Отлично! ${waterDrunk}/${WATER_GOAL} мл`;
+
+        // Если норма достигнута — показать поздравление
+        if (waterDrunk >= WATER_GOAL) {
+            reminder.style.background = '#2ecc71';
+            reminder.textContent = '✅ Норма воды на сегодня выполнена!';
+            setTimeout(() => reminder.remove(), 4000);
+        }
+    });
+
+    // Обновляем уведомление каждые 2 часа
+    setInterval(() => {
+        const now = new Date();
+        if (now.getHours() >= 8 && now.getHours() <= 22) { // только в активное время дня
+            if (waterDrunk < WATER_GOAL) {
+                reminder.style.display = 'block';
+                reminder.textContent = `💧 Пора выпить воды! (${waterDrunk}/${WATER_GOAL} мл)`;
+            }
+        }
+    }, 1000 * 60 * 60 * 2); // каждые 2 часа
+
+    // Автоматический сброс в полночь
+    const now = new Date();
+    const millisTillMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 5) - now;
+    setTimeout(() => {
+        localStorage.setItem('waterDrunk', '0');
+        reminder.remove();
+    }, millisTillMidnight);
+})();
+// ================== 💧 Визуальный виджет воды ==================
+(function waterWidget() {
+    const WATER_GOAL = 2000;
+    let waterDrunk = parseInt(localStorage.getItem('waterDrunk') || '0');
+
+    // Создаём контейнер виджета
+    const widget = document.createElement('div');
+    widget.id = 'water-widget';
+    widget.style.position = 'fixed';
+    widget.style.bottom = '100px';
+    widget.style.right = '20px';
+    widget.style.width = '120px';
+    widget.style.height = '180px';
+    widget.style.background = 'rgba(255,255,255,0.9)';
+    widget.style.border = '2px solid #4a90e2';
+    widget.style.borderRadius = '20px';
+    widget.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
+    widget.style.overflow = 'hidden';
+    widget.style.display = 'flex';
+    widget.style.flexDirection = 'column';
+    widget.style.alignItems = 'center';
+    widget.style.justifyContent = 'flex-end';
+    widget.style.cursor = 'pointer';
+    widget.style.transition = 'transform 0.2s ease';
+    widget.title = "Нажми, чтобы добавить 200 мл воды 💧";
+
+    // Текст сверху
+    const label = document.createElement('div');
+    label.textContent = '💧 Вода';
+    label.style.fontWeight = 'bold';
+    label.style.marginTop = '6px';
+    label.style.color = '#4a90e2';
+    label.style.fontSize = '16px';
+
+    // Контейнер стакана
+    const glass = document.createElement('div');
+    glass.style.position = 'relative';
+    glass.style.width = '80px';
+    glass.style.height = '120px';
+    glass.style.border = '3px solid #4a90e2';
+    glass.style.borderRadius = '10px';
+    glass.style.overflow = 'hidden';
+    glass.style.marginTop = '6px';
+    glass.style.background = '#fff';
+
+    // Вода (заливка)
+    const fill = document.createElement('div');
+    fill.style.position = 'absolute';
+    fill.style.bottom = '0';
+    fill.style.left = '0';
+    fill.style.width = '100%';
+    fill.style.background = '#4a90e2';
+    fill.style.transition = 'height 0.4s ease';
+    fill.style.height = `${(waterDrunk / WATER_GOAL) * 100}%`;
+
+    // Текст с количеством воды
+    const counter = document.createElement('div');
+    counter.textContent = `${waterDrunk}/${WATER_GOAL} мл`;
+    counter.style.margin = '6px 0';
+    counter.style.color = '#333';
+    counter.style.fontSize = '14px';
+
+    glass.appendChild(fill);
+    widget.appendChild(label);
+    widget.appendChild(glass);
+    widget.appendChild(counter);
+    document.body.appendChild(widget);
+
+    // Эффект наведения
+    widget.addEventListener('mouseenter', () => {
+        widget.style.transform = 'scale(1.05)';
+    });
+    widget.addEventListener('mouseleave', () => {
+        widget.style.transform = 'scale(1)';
+    });
+
+    // При клике добавляем 200 мл
+    widget.addEventListener('click', () => {
+        waterDrunk += 200;
+        if (waterDrunk > WATER_GOAL) waterDrunk = WATER_GOAL;
+        localStorage.setItem('waterDrunk', waterDrunk);
+
+        fill.style.height = `${(waterDrunk / WATER_GOAL) * 100}%`;
+        counter.textContent = `${waterDrunk}/${WATER_GOAL} мл`;
+
+        if (waterDrunk >= WATER_GOAL) {
+            widget.style.borderColor = '#2ecc71';
+            label.textContent = '✅ Выполнено';
+            label.style.color = '#2ecc71';
+        }
+    });
+
+    // Автоматический сброс в полночь
+    const now = new Date();
+    const millisTillMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 5) - now;
+    setTimeout(() => {
+        localStorage.setItem('waterDrunk', '0');
+        widget.remove();
+        waterWidget(); // перезапуск виджета
+    }, millisTillMidnight);
+})();
