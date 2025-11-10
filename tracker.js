@@ -313,11 +313,11 @@ themeToggleBtn.addEventListener('click', () => {
     renderCalendar();
     renderHabits();
 });
-
 // ================== 💧 Напоминание пить воду ==================
 (function waterReminder() {
-    // Норма воды в день (в мл)
-    const WATER_GOAL = 2000;
+    // Получаем норму воды из лайфстайла (в литрах)
+    const WATER_GOAL_LITERS = Math.max(2, parseFloat(localStorage.getItem("life_waterLiters")) || 2);
+    const WATER_GOAL = WATER_GOAL_LITERS * 1000; // перевод в мл
 
     // Загружаем текущий прогресс воды из localStorage
     let waterDrunk = parseInt(localStorage.getItem('waterDrunk') || '0');
@@ -336,7 +336,7 @@ themeToggleBtn.addEventListener('click', () => {
     reminder.style.zIndex = '9999';
     reminder.style.transition = '0.3s ease';
     reminder.style.cursor = 'pointer';
-    reminder.textContent = `💧 Выпей воды! (${waterDrunk}/${WATER_GOAL} мл)`;
+    reminder.textContent = `💧 Выпей воды! (${(waterDrunk/1000).toFixed(1)}/${WATER_GOAL_LITERS} л)`;
     document.body.appendChild(reminder);
 
     // Клик по уведомлению — добавляем 200 мл
@@ -344,9 +344,8 @@ themeToggleBtn.addEventListener('click', () => {
         waterDrunk += 200;
         if (waterDrunk > WATER_GOAL) waterDrunk = WATER_GOAL;
         localStorage.setItem('waterDrunk', waterDrunk);
-        reminder.textContent = `💧 Отлично! ${waterDrunk}/${WATER_GOAL} мл`;
+        reminder.textContent = `💧 Отлично! ${(waterDrunk/1000).toFixed(1)}/${WATER_GOAL_LITERS} л`;
 
-        // Если норма достигнута — показать поздравление
         if (waterDrunk >= WATER_GOAL) {
             reminder.style.background = '#2ecc71';
             reminder.textContent = '✅ Норма воды на сегодня выполнена!';
@@ -360,7 +359,7 @@ themeToggleBtn.addEventListener('click', () => {
         if (now.getHours() >= 8 && now.getHours() <= 22) { // только в активное время дня
             if (waterDrunk < WATER_GOAL) {
                 reminder.style.display = 'block';
-                reminder.textContent = `💧 Пора выпить воды! (${waterDrunk}/${WATER_GOAL} мл)`;
+                reminder.textContent = `💧 Пора выпить воды! (${(waterDrunk/1000).toFixed(1)}/${WATER_GOAL_LITERS} л)`;
             }
         }
     }, 1000 * 60 * 60 * 2); // каждые 2 часа
@@ -373,9 +372,12 @@ themeToggleBtn.addEventListener('click', () => {
         reminder.remove();
     }, millisTillMidnight);
 })();
+
 // ================== 💧 Визуальный виджет воды ==================
 (function waterWidget() {
-    const WATER_GOAL = 2000;
+    const WATER_GOAL_LITERS = Math.max(2, parseFloat(localStorage.getItem("life_waterLiters")) || 2);
+    const WATER_GOAL = WATER_GOAL_LITERS * 1000;
+
     let waterDrunk = parseInt(localStorage.getItem('waterDrunk') || '0');
 
     // Создаём контейнер виджета
@@ -430,7 +432,7 @@ themeToggleBtn.addEventListener('click', () => {
 
     // Текст с количеством воды
     const counter = document.createElement('div');
-    counter.textContent = `${waterDrunk}/${WATER_GOAL} мл`;
+    counter.textContent = `${(waterDrunk/1000).toFixed(1)}/${WATER_GOAL_LITERS} л`;
     counter.style.margin = '6px 0';
     counter.style.color = '#333';
     counter.style.fontSize = '14px';
@@ -456,7 +458,7 @@ themeToggleBtn.addEventListener('click', () => {
         localStorage.setItem('waterDrunk', waterDrunk);
 
         fill.style.height = `${(waterDrunk / WATER_GOAL) * 100}%`;
-        counter.textContent = `${waterDrunk}/${WATER_GOAL} мл`;
+        counter.textContent = `${(waterDrunk/1000).toFixed(1)}/${WATER_GOAL_LITERS} л`;
 
         if (waterDrunk >= WATER_GOAL) {
             widget.style.borderColor = '#2ecc71';
