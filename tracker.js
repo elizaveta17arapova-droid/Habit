@@ -63,6 +63,7 @@ addBtn.addEventListener('click', () => {
     renderCalendar();
 });
 
+
 // ----------------- Сохранение привычек -----------------
 function saveHabits() {
     localStorage.setItem('habits_' + currentUser.email, JSON.stringify(habits));
@@ -88,15 +89,24 @@ function renderHabits() {
     updateStats();
 }
 
-// ----------------- Отметка выполнения -----------------
 function toggleDone(index) {
     const filtered = habits.filter(h => h.date === selectedDate);
     const habitIndex = habits.indexOf(filtered[index]);
     if (habitIndex === -1) return;
-    habits[habitIndex].done = !habits[habitIndex].done;
+
+    const habit = habits[habitIndex];
+    habit.done = !habit.done;
     saveHabits();
     renderHabits();
+
+    // 🎮 Геймификация с передачей done
+    Gamification.recordCompletion(habit.name, habit.done);
+
+    // Обновляем панель геймификации
+    updateGamificationPanel();
 }
+
+
 
 // ----------------- Редактирование привычки -----------------
 function editHabit(index) {
@@ -327,7 +337,7 @@ themeToggleBtn.addEventListener('click', () => {
     reminder.id = 'water-reminder';
     reminder.style.position = 'fixed';
     reminder.style.bottom = '20px';
-    reminder.style.right = '20px';
+    reminder.style.left = '20px';
     reminder.style.background = '#4a90e2';
     reminder.style.color = 'white';
     reminder.style.padding = '12px 18px';
@@ -336,7 +346,7 @@ themeToggleBtn.addEventListener('click', () => {
     reminder.style.zIndex = '9999';
     reminder.style.transition = '0.3s ease';
     reminder.style.cursor = 'pointer';
-    reminder.textContent = `💧 Выпей воды! (${(waterDrunk/1000).toFixed(1)}/${WATER_GOAL_LITERS} л)`;
+    reminder.textContent = `💧 Выпей воды! (${(waterDrunk / 1000).toFixed(1)}/${WATER_GOAL_LITERS} л)`;
     document.body.appendChild(reminder);
 
     // Клик по уведомлению — добавляем 200 мл
@@ -344,7 +354,7 @@ themeToggleBtn.addEventListener('click', () => {
         waterDrunk += 200;
         if (waterDrunk > WATER_GOAL) waterDrunk = WATER_GOAL;
         localStorage.setItem('waterDrunk', waterDrunk);
-        reminder.textContent = `💧 Отлично! ${(waterDrunk/1000).toFixed(1)}/${WATER_GOAL_LITERS} л`;
+        reminder.textContent = `💧 Отлично! ${(waterDrunk / 1000).toFixed(1)}/${WATER_GOAL_LITERS} л`;
 
         if (waterDrunk >= WATER_GOAL) {
             reminder.style.background = '#2ecc71';
@@ -359,7 +369,7 @@ themeToggleBtn.addEventListener('click', () => {
         if (now.getHours() >= 8 && now.getHours() <= 22) { // только в активное время дня
             if (waterDrunk < WATER_GOAL) {
                 reminder.style.display = 'block';
-                reminder.textContent = `💧 Пора выпить воды! (${(waterDrunk/1000).toFixed(1)}/${WATER_GOAL_LITERS} л)`;
+                reminder.textContent = `💧 Пора выпить воды! (${(waterDrunk / 1000).toFixed(1)}/${WATER_GOAL_LITERS} л)`;
             }
         }
     }, 1000 * 60 * 60 * 2); // каждые 2 часа
@@ -385,7 +395,7 @@ themeToggleBtn.addEventListener('click', () => {
     widget.id = 'water-widget';
     widget.style.position = 'fixed';
     widget.style.bottom = '100px';
-    widget.style.right = '20px';
+    widget.style.left = '5px';
     widget.style.width = '120px';
     widget.style.height = '180px';
     widget.style.background = 'rgba(255,255,255,0.9)';
@@ -432,7 +442,7 @@ themeToggleBtn.addEventListener('click', () => {
 
     // Текст с количеством воды
     const counter = document.createElement('div');
-    counter.textContent = `${(waterDrunk/1000).toFixed(1)}/${WATER_GOAL_LITERS} л`;
+    counter.textContent = `${(waterDrunk / 1000).toFixed(1)}/${WATER_GOAL_LITERS} л`;
     counter.style.margin = '6px 0';
     counter.style.color = '#333';
     counter.style.fontSize = '14px';
@@ -458,7 +468,7 @@ themeToggleBtn.addEventListener('click', () => {
         localStorage.setItem('waterDrunk', waterDrunk);
 
         fill.style.height = `${(waterDrunk / WATER_GOAL) * 100}%`;
-        counter.textContent = `${(waterDrunk/1000).toFixed(1)}/${WATER_GOAL_LITERS} л`;
+        counter.textContent = `${(waterDrunk / 1000).toFixed(1)}/${WATER_GOAL_LITERS} л`;
 
         if (waterDrunk >= WATER_GOAL) {
             widget.style.borderColor = '#2ecc71';
@@ -475,4 +485,16 @@ themeToggleBtn.addEventListener('click', () => {
         widget.remove();
         waterWidget(); // перезапуск виджета
     }, millisTillMidnight);
+
 })();
+// ================== 🎯 Панель геймификации ==================
+function updateGamificationPanel() {
+    const info = Gamification.getInfo();
+    document.getElementById('gami-points').textContent = info.points;
+    document.getElementById('gami-level').textContent = info.level;
+    document.getElementById('gami-next').textContent = info.next;
+}
+
+// обновляем панель каждые 2 секунды (вдруг пользователь что-то сделал)
+setInterval(updateGamificationPanel, 2000);
+updateGamificationPanel();

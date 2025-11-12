@@ -767,8 +767,8 @@ body.dark .custom-alert {
 
 /* ===== ТЕМНАЯ ТЕМА ===== */
 body.dark {
-    background-color: #121212;
-    color: #f0f0f0;
+  background-color: #121212;
+  color: #f0f0f0;
 }
 
 body.dark header,
@@ -780,8 +780,8 @@ body.dark #stats,
 body.dark #calendar,
 body.dark #archive,
 body.dark .app-container {
-    background-color: #1e1e1e;
-    color: #f0f0f0;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
 }
 
 /* Кнопки в темной теме */
@@ -792,8 +792,8 @@ body.dark #add-btn,
 body.dark #change-avatar-btn,
 body.dark #logout-btn,
 body.dark #profile-menu-btn {
-    background-color: #333;
-    color: #f0f0f0;
+  background-color: #333;
+  color: #f0f0f0;
 }
 
 body.dark button:hover,
@@ -803,20 +803,93 @@ body.dark #add-btn:hover,
 body.dark #change-avatar-btn:hover,
 body.dark #logout-btn:hover,
 body.dark #profile-menu-btn:hover {
-    background-color: #555;
+  background-color: #555;
 }
 
 /* Карточки привычек */
 body.dark .habit-item {
-    background-color: #2a2a2a;
-    color: #f0f0f0;
-    border-radius: 6px;
-    margin-bottom: 4px;
-    padding: 6px 10px;
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+  border-radius: 6px;
+  margin-bottom: 4px;
+  padding: 6px 10px;
 }
 
 /* Архив привычек */
 body.dark #archived-habits li {
-    background-color: #2a2a2a;
-    color: #f0f0f0;
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+}
+
+/* 🎉 Уведомления справа */
+.gami-toast {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  /* теперь справа */
+  background: #1e90ff;
+  color: #fff;
+  padding: 12px 18px;
+  margin-top: 8px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  font-family: sans-serif;
+  font-weight: bold;
+  z-index: 9999;
+  animation: fadein-right 0.4s ease, fadeout 0.4s 2.6s ease;
+}
+
+/* 👇 Анимация появления справа */
+@keyframes fadein-right {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+    /* появляется справа */
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 👇 Анимация исчезновения */
+@keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+/* 🎯 Панель геймификации (очки, уровень, прогресс) */
+/* 🎯 Панель геймификации */
+#gamification-panel {
+  background-color: #ffffff;
+  /* белый фон, как у карточек привычек */
+  border-radius: 12px;
+  /* мягкие закругления */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  /* лёгкая тень */
+  padding: 20px;
+  box-sizing: border-box;
+  width: 100%;
+  /* займёт ширину колонки */
+  font-family: sans-serif;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+#gamification-panel h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 16px;
+  color: #4a90e2;
+}
+
+#gamification-panel p {
+  margin: 6px 0;
+  font-size: 14px;
 }

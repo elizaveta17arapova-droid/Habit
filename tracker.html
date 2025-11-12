@@ -6,6 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Трекер привычек</title>
   <link rel="stylesheet" href="style.css">
+
+
+
+
 </head>
 
 <body>
@@ -56,6 +60,12 @@
         <p>Процент выполнения: <span id="completion">0%</span></p>
         <p>Streak текущей привычки: <span id="streak">0</span> дней</p>
       </section>
+      <div id="gamification-panel">
+        <h3>🎯 Геймификация</h3>
+        <p>Очки: <span id="gami-points">0</span></p>
+        <p>Уровень: <span id="gami-level">1</span></p>
+        <p>До следующего уровня: <span id="gami-next">100</span></p>
+      </div>
 
       <!-- Календарь -->
       <section id="calendar">
@@ -80,6 +90,8 @@
   </div>
 
   <script src="tracker.js"></script>
+  <script src="gamification.js"></script>
+  <link rel="stylesheet" href="style_gamification.css">
 </body>
 
 </html>
