@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ИИ Помощник - Habit</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="navbar">
+                <div class="nav-brand">HabitAI</div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="tracker.html">Трекер</a></li>
+                    <li><a href="profile.html">Профиль</a></li>
+                    <li><a href="ai_assistant.html" class="active">ИИ Помощник</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="ai-assistant-container">
+            <div class="ai-header">
+                <h1>ИИ Помощник по Привычкам</h1>
+                <p>Получите персонализированные рекомендации по привычкам на основе ваших целей</p>
+            </div>
+
+            <div class="ai-content">
+                <!-- Форма для ввода предпочтений -->
+                <div class="preferences-form">
+                    <h3>Расскажите о своих целях</h3>
+                    <form id="preferencesForm">
+                        <div class="form-group">
+                            <label for="goals">Мои основные цели:</label>
+                            <textarea id="goals" placeholder="Например: улучшить здоровье, повысить продуктивность, научиться новому..." rows="3"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="availableTime">Свободное время в день:</label>
+                            <select id="availableTime">
+                                <option value="15">15 минут</option>
+                                <option value="30">30 минут</option>
+                                <option value="45">45 минут</option>
+                                <option value="60">1 час</option>
+                                <option value="120">2+ часа</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="experience">Уровень опыта:</label>
+                            <select id="experience">
+                                <option value="beginner">Начинающий</option>
+                                <option value="intermediate">Средний</option>
+                                <option value="advanced">Опытный</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="preferences">Предпочтения и ограничения:</label>
+                            <textarea id="preferences" placeholder="Например: нет тренажерного зала, работаю из дома, аллергия на..." rows="2"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-primary" id="generateBtn">
+                            <span id="btnText">Сгенерировать привычки</span>
+                            <div class="spinner hidden" id="spinner"></div>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Результаты от ИИ -->
+                <div class="ai-results hidden" id="resultsSection">
+                    <h3>Персонализированные привычки для вас:</h3>
+                    <div class="habits-list" id="habitsList">
+                        <!-- Сгенерированные привычки появятся здесь -->
+                    </div>
+                    <button class="btn-secondary" id="addAllBtn">Добавить все в трекер</button>
+                </div>
+
+                <!-- Чат с ИИ -->
+                <div class="ai-chat">
+                    <h3>Задайте вопрос ИИ-помощнику</h3>
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message ai-message">
+                                <div class="message-content">
+                                    Привет! Я ваш помощник по формированию привычек. Спросите меня о чем угодно, связанном с привычками, продуктивностью или личным развитием!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="chatInput" placeholder="Задайте вопрос о привычках...">
+                            <button id="sendMessageBtn">Отправить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="ai_assistant.js"></script>
+</body>
+</html>

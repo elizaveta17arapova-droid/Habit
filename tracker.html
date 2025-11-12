@@ -6,10 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Трекер привычек</title>
   <link rel="stylesheet" href="style.css">
-
-
-
-
 </head>
 
 <body>
@@ -19,10 +15,14 @@
       <img id="profile-img" class="avatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Аватар">
       <span id="user-email"></span>
       <span id="current-date"></span>
-      <a href="profile.html" id="profile-menu-btn">☰ Настройки</a>
+      
+      <!-- Навигационное меню -->
+      <nav id="main-nav">
+        <a href="profile.html" id="profile-menu-btn">☰ Настройки</a>
+        <a href="ai_assistant.html" id="ai-assistant-btn">🤖 ИИ Помощник</a>
+      </nav>
 
-
-      <!-- Выпадающее меню -->
+      <!-- Выпадающее меню профиля -->
       <div id="profile-menu" class="profile-menu" style="display:none;">
         <h3>Профиль</h3>
         <img id="menu-avatar" class="avatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Аватар">
@@ -60,6 +60,7 @@
         <p>Процент выполнения: <span id="completion">0%</span></p>
         <p>Streak текущей привычки: <span id="streak">0</span> дней</p>
       </section>
+      
       <div id="gamification-panel">
         <h3>🎯 Геймификация</h3>
         <p>Очки: <span id="gami-points">0</span></p>
@@ -76,16 +77,13 @@
       <!-- Архив -->
       <section id="archive">
         <h2>Архив привычек</h2>
-
         <div id="archive-filters">
           <button class="archive-filter active" data-filter="all">Все</button>
           <button class="archive-filter" data-filter="done">✅ Выполненные</button>
           <button class="archive-filter" data-filter="active">🕓 Невыполненные</button>
         </div>
-
         <ul id="archived-habits"></ul>
       </section>
-
     </main>
   </div>
 

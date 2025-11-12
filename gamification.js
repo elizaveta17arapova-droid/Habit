@@ -133,3 +133,10 @@ const sounds = {
         }
     };
 })();
+// Добавьте бонусные очки за использование ИИ-помощника
+function awardAIUsagePoints() {
+    const points = getCurrentPoints();
+    const newPoints = points + 25; // 25 очков за использование ИИ
+    updatePoints(newPoints);
+    showNotification('+25 очков за использование ИИ помощника!', 'success');
+}

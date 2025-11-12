@@ -1,10 +1,44 @@
+
 // Проверка, залогинен ли пользователь
 const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 if (!currentUser) {
     alert('Сначала войдите в систему');
-    window.location.href = 'index.html';
+    window.location.href = 'regis.html';
 }
 
+// 🔧 НОВАЯ ФУНКЦИЯ: Загрузка привычек из ИИ
+function loadHabitsFromAI() {
+    const aiHabits = JSON.parse(localStorage.getItem('ai_generated_habits') || '[]');
+    const userHabits = JSON.parse(localStorage.getItem('habits_' + currentUser.email) || '[]');
+    
+    // Фильтруем привычки ИИ для текущего пользователя
+    const userAIHabits = aiHabits.filter(habit => 
+        habit.userId === currentUser.email
+    );
+    
+    // Добавляем только новые привычки
+    userAIHabits.forEach(aiHabit => {
+        const exists = userHabits.some(habit => habit.name === aiHabit.name);
+        if (!exists) {
+            userHabits.push({
+                name: aiHabit.name,
+                done: false,
+                date: new Date().toISOString().split('T')[0],
+                description: aiHabit.description,
+                category: aiHabit.category
+            });
+        }
+    });
+    
+    localStorage.setItem('habits_' + currentUser.email, JSON.stringify(userHabits));
+    return userHabits;
+}
+
+// Вызовите эту функцию при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    loadHabitsFromAI();
+    // остальной ваш код инициализации...
+});
 // Элементы страницы
 const userEmail = document.getElementById('user-email');
 const currentDateEl = document.getElementById('current-date');
@@ -498,3 +532,21 @@ function updateGamificationPanel() {
 // обновляем панель каждые 2 секунды (вдруг пользователь что-то сделал)
 setInterval(updateGamificationPanel, 2000);
 updateGamificationPanel();
+// Добавьте эту функцию в tracker.js
+function loadHabitsFromAI() {
+    const aiHabits = JSON.parse(localStorage.getItem('ai_generated_habits') || '[]');
+    const userHabits = JSON.parse(localStorage.getItem('user_habits') || '[]');
+    
+    // Объединяем привычки, избегая дубликатов
+    const allHabits = [...userHabits];
+    
+    aiHabits.forEach(aiHabit => {
+        const exists = userHabits.some(habit => habit.name === aiHabit.name);
+        if (!exists) {
+            allHabits.push(aiHabit);
+        }
+    });
+    
+    localStorage.setItem('user_habits', JSON.stringify(allHabits));
+    return allHabits;
+}
