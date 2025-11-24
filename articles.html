@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Полезные статьи</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f2f5;
+        }
+
+        header {
+            background: #4a90e2;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        main.grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        main.grid .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            color: #333;
+        }
+
+        main.grid .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        main.grid .card img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+
+        main.grid .card h3 {
+            margin: 12px 10px 15px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .back-btn {
+            display: block;
+            width: max-content;
+            margin: 0 auto 20px;
+            padding: 10px 20px;
+            background: #4a90e2;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            text-align: center;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #357ab8;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Полезные статьи</h1>
+</header>
+
+<main class="grid">
+    <a href="article1.html" class="card">
+        <img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&h=400" alt="Питание">
+        <h3>Правильное питание: основы здорового рациона</h3>
+    </a>
+
+    <a href="article2.html" class="card">
+        <img src="https://i.pinimg.com/736x/32/51/64/325164f490fecd53ee1c4834b16bdcfa.jpg" alt="Сон">
+        <h3>Как улучшить сон: советы и лайфхаки</h3>
+    </a>
+
+    <a href="article3.html" class="card">
+        <img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhfHxzcG9ydHxlbnwwfHx8fDE2OTYyMzUwMDM&ixlib=rb-4.0.3&q=80&w=400" alt="Упражнения">
+        <h3>Полезные упражнения для здоровья и энергии</h3>
+    </a>
+</main>
+
+<a href="tracker.html" class="back-btn">← Назад на главную</a>
+
+</body>
+</html>
