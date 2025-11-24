@@ -21,9 +21,11 @@
 
         main.grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(3, 1fr); /* 3 статьи в ряд */
             gap: 20px;
             padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         main.grid .card {
@@ -59,7 +61,7 @@
         .back-btn {
             display: block;
             width: max-content;
-            margin: 0 auto 20px;
+            margin: 20px auto;
             padding: 10px 20px;
             background: #4a90e2;
             color: white;
@@ -72,6 +74,18 @@
         .back-btn:hover {
             background: #357ab8;
         }
+
+        @media(max-width: 950px){
+            main.grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 в ряд на планшетах */
+            }
+        }
+
+        @media(max-width: 650px){
+            main.grid {
+                grid-template-columns: 1fr; /* 1 в ряд на мобильных */
+            }
+        }
     </style>
 </head>
 <body>
@@ -81,19 +95,36 @@
 </header>
 
 <main class="grid">
+    <!-- Первая строка -->
     <a href="article1.html" class="card">
         <img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&h=400" alt="Питание">
         <h3>Правильное питание: основы здорового рациона</h3>
     </a>
 
     <a href="article2.html" class="card">
-        <img src="https://i.pinimg.com/736x/32/51/64/325164f490fecd53ee1c4834b16bdcfa.jpg" alt="Сон">
+        <img src="https://i.pinimg.com/1200x/2f/bd/4f/2fbd4ff2c5aa440c015b5beca8946e6a.jpg" alt="Сон">
         <h3>Как улучшить сон: советы и лайфхаки</h3>
     </a>
 
     <a href="article3.html" class="card">
-        <img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhfHxzcG9ydHxlbnwwfHx8fDE2OTYyMzUwMDM&ixlib=rb-4.0.3&q=80&w=400" alt="Упражнения">
+        <img src="https://i.pinimg.com/736x/af/e0/f4/afe0f415ce65fd875f635d33409eeb6b.jpg" alt="Упражнения">
         <h3>Полезные упражнения для здоровья и энергии</h3>
+    </a>
+
+    <!-- Вторая строка -->
+    <a href="article4.html" class="card">
+        <img src="https://i.pinimg.com/736x/ec/e5/96/ece596e2c37c2c17fb5cc0d7b97d67e4.jpg" alt="Медитация">
+        <h3>Медитация и стресс: как сохранять спокойствие</h3>
+    </a>
+
+    <a href="article5.html" class="card">
+        <img src="https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg?auto=compress&cs=tinysrgb&h=400" alt="Планирование">
+        <h3>Планирование дня и продуктивность: советы для эффективности</h3>
+    </a>
+
+    <a href="article6.html" class="card">
+        <img src="https://i.pinimg.com/736x/39/54/ea/3954eae2b8973687eb4b30b1676f692c.jpg" alt="Уход за кожей">
+        <h3>Здоровая кожа и уход за собой: простые правила</h3>
     </a>
 </main>
 
