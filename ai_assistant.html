@@ -1,174 +1,111 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ИИ Помощник - Habit</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="style1.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ИИ Помощник - Habit</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style1.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <nav class="navbar">
-                <div class="nav-brand">HabitAI</div>
-                <ul class="nav-links">
-                    <li><a href="index.html">Главная</a></li>
-                    <li><a href="tracker.html">Трекер</a></li>
-                    <li><a href="profile.html">Профиль</a></li>
-                    <li><a href="ai_assistant.html" class="active">ИИ Помощник</a></li>
-                </ul>
-            </nav>
-        </header>
+    <div class="container">
+        <header>
+            <nav class="navbar">
+                <div class="nav-brand">HabitAI</div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="tracker.html">Трекер</a></li>
+                    <li><a href="profile.html">Профиль</a></li>
+                    <li><a href="ai_assistant.html" class="active">ИИ Помощник</a></li>
+                </ul>
+            </nav>
+        </header>
 
-        <main class="ai-assistant-container">
-            <div class="ai-header">
-                <h1>ИИ Помощник по Привычкам</h1>
-                <p>Получите персонализированные рекомендации по привычкам на основе ваших целей</p>
-            </div>
+        <main class="ai-assistant-container">
+            <div class="ai-header">
+                <h1>ИИ Помощник по Привычкам</h1>
+                <p>Получите персонализированные рекомендации по привычкам на основе ваших целей</p>
+            </div>
 
-            <div class="ai-content">
-                                <div class="preferences-form">
-                    <h3>Расскажите о своих целях</h3>
-                    <form id="preferencesForm">
-                        <div class="form-group">
-                            <label for="goals">Мои основные цели:</label>
-                            <textarea id="goals" placeholder="Например: улучшить здоровье, повысить продуктивность, научиться новому..." rows="3"></textarea>
-                        </div>
-                        <div class="chrono-form-section">
-                            <h3>⏰ Хронобиологический профиль</h3>
-    
-                            <div class="chrono-form">
-                                                                <button type="button" class="analyze-chronotype-btn" id="analyzeChronotypeBtn">
-                                    🔬 Автоматически определить мой тип
-                                </button>
-                                <p class="help-text">ИЛИ заполните вручную:</p>
-        
-                                <div class="form-group">
-                                    <label for="wakeupTime">Во сколько вы обычно просыпаетесь?</label>
-                                    <select id="wakeupTime" class="time-select">
-                                        <option value="">Выберите время</option>
-                                        <option value="4:00">4:00</option>
-                                        <option value="5:00">5:00</option>
-                                        <option value="6:00">6:00</option>
-                                        <option value="7:00">7:00</option>
-                                        <option value="8:00">8:00</option>
-                                        <option value="9:00">9:00</option>
-                                        <option value="10:00">10:00</option>
-                                        <option value="11:00">11:00</option>
-                                        <option value="12:00">12:00</option>
-                                    </select>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="sleepTime">Во сколько вы обычно ложитесь спать?</label>
-                                    <select id="sleepTime" class="time-select">
-                                        <option value="">Выберите время</option>
-                                        <option value="20:00">20:00</option>
-                                        <option value="21:00">21:00</option>
-                                        <option value="22:00">22:00</option>
-                                        <option value="23:00">23:00</option>
-                                        <option value="0:00">0:00</option>
-                                        <option value="1:00">1:00</option>
-                                        <option value="2:00">2:00</option>
-                                        <option value="3:00">3:00</option>
-                                    </select>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label>Когда у вас пик энергии? (можно выбрать несколько)</label>
-                                    <div class="time-periods">
-                                        <label class="time-checkbox">
-                                            <input type="checkbox" name="energyPeak" value="утро"> Утро (6-9)
-                                        </label>
-                                        <label class="time-checkbox">
-                                            <input type="checkbox" name="energyPeak" value="день"> День (10-14)
-                                        </label>
-                                        <label class="time-checkbox">
-                                            <input type="checkbox" name="energyPeak" value="вечер"> Вечер (15-20)
-                                        </label>
-                                        <label class="time-checkbox">
-                                            <input type="checkbox" name="energyPeak" value="ночь"> Ночь (21-5)
-                                        </label>
-                                    </div>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="chronotypeGuess">Как вы себя считаете?</label>
-                                    <select id="chronotypeGuess">
-                                        <option value="">Не знаю</option>
-                                        <option value="жаворонок">😴 Жаворонок (рано встаю, рано ложусь)</option>
-                                        <option value="голубь">🕊️ Голубь (средний режим)</option>
-                                        <option value="сова">🦉 Сова (поздно встаю, поздно ложусь)</option>
-                                        <option value="дельфин">🐬 Дельфин (беспокойный сон)</option>
-                                    </select>
-                                </div>
-                                
-                                <button type="button" class="btn-secondary" id="saveChronotypeBtn">
-                                    💾 Сохранить профиль
-                                </button>
-                            </div>
+            <div class="ai-content">
+                <!-- Форма для ввода предпочтений -->
+                <div class="preferences-form">
+                    <h3>Расскажите о своих целях</h3>
+                    <form id="preferencesForm">
+                        <div class="form-group">
+                            <label for="goals">Мои основные цели:</label>
+                            <textarea id="goals" placeholder="Например: улучшить здоровье, повысить продуктивность, научиться новому..." rows="3"></textarea>
                         </div>
-                                                <div class="form-group">
-                            <label for="availableTime">Свободное время в день:</label>
-                            <select id="availableTime">
-                                <option value="15">15 минут</option>
-                                <option value="30">30 минут</option>
-                                <option value="45">45 минут</option>
-                                <option value="60">1 час</option>
-                                <option value="120">2+ часа</option>
-                            </select>
-                        </div>
 
-                        <div class="form-group">
-                            <label for="experience">Уровень опыта:</label>
-                            <select id="experience">
-                                <option value="beginner">Начинающий</option>
-                                <option value="intermediate">Средний</option>
-                                <option value="advanced">Опытный</option>
-                            </select>
-                        </div>
+                        <div class="form-group">
+                            <label for="availableTime">Свободное время в день:</label>
+                            <select id="availableTime">
+                                <option value="15">15 минут</option>
+                                <option value="30">30 минут</option>
+                                <option value="45">45 минут</option>
+                                <option value="60">1 час</option>
+                                <option value="120">2+ часа</option>
+                            </select>
+                        </div>
 
-                        <div class="form-group">
-                            <label for="preferences">Предпочтения и ограничения:</label>
-                            <textarea id="preferences" placeholder="Например: нет тренажерного зала, работаю из дома, аллергия на..." rows="2"></textarea>
-                        </div>
-                        
-                                                <button type="submit" class="btn-primary" id="generateBtn">
-                            <span id="btnText">Сгенерировать привычки</span>
-                            <div class="spinner hidden" id="spinner"></div>
-                        </button>
-                    </form>
-                </div>
+                        <div class="form-group">
+                            <label for="experience">Уровень опыта:</label>
+                            <select id="experience">
+                                <option value="beginner">Начинающий</option>
+                                <option value="intermediate">Средний</option>
+                                <option value="advanced">Опытный</option>
+                            </select>
+                        </div>
 
-                                <div class="ai-results hidden" id="resultsSection">
-                    <h3>Персонализированные привычки для вас:</h3>
-                    <div class="habits-list" id="habitsList">
-                                            </div>
-                    <button class="btn-secondary" id="addAllBtn">Добавить все в трекер</button>
-                </div>
+                        <div class="form-group">
+                            <label for="preferences">Предпочтения и ограничения:</label>
+                            <textarea id="preferences" placeholder="Например: нет тренажерного зала, работаю из дома, аллергия на..." rows="2"></textarea>
+                        </div>
+                        <!-- Добавьте эту кнопку после формы предпочтений -->
+                        <div class="form-group">
+                            <button type="button" class="analyze-chronotype-btn" id="analyzeChronotypeBtn">
+                               🔬 Определить мой хронобиологический тип
+                            </button>
+                            <p class="help-text">Это поможет подобрать оптимальное время для привычек</p>
+</div>
+                        <button type="submit" class="btn-primary" id="generateBtn">
+                            <span id="btnText">Сгенерировать привычки</span>
+                            <div class="spinner hidden" id="spinner"></div>
+                        </button>
+                    </form>
+                </div>
 
-                                <div class="ai-chat">
-                    <h3>Задайте вопрос ИИ-помощнику</h3>
-                    <div class="chat-container">
-                        <div class="chat-messages" id="chatMessages">
-                            <div class="message ai-message">
-                                <div class="message-content">
-                                    Привет! Я ваш помощник по формированию привычек. Спросите меня о чем угодно, связанном с привычками, продуктивностью или личным развитием!
-                                </div>
-                            </div>
-                        </div>
-                        <div class="chat-input">
-                            <input type="text" id="chatInput" placeholder="Задайте вопрос о привычках...">
-                            <button id="sendMessageBtn">Отправить</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
+                <!-- Результаты от ИИ -->
+                <div class="ai-results hidden" id="resultsSection">
+                    <h3>Персонализированные привычки для вас:</h3>
+                    <div class="habits-list" id="habitsList">
+                        <!-- Сгенерированные привычки появятся здесь -->
+                    </div>
+                    <button class="btn-secondary" id="addAllBtn">Добавить все в трекер</button>
+                </div>
 
-    <script src="auth.js"></script>
-    <script src="ai_assistant.js"></script>
+                <!-- Чат с ИИ -->
+                <div class="ai-chat">
+                    <h3>Задайте вопрос ИИ-помощнику</h3>
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message ai-message">
+                                <div class="message-content">
+                                    Привет! Я ваш помощник по формированию привычек. Спросите меня о чем угодно, связанном с привычками, продуктивностью или личным развитием!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="chatInput" placeholder="Задайте вопрос о привычках...">
+                            <button id="sendMessageBtn">Отправить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="ai_assistant.js"></script>
 </body>
 </html>
