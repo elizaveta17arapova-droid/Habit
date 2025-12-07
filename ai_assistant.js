@@ -6,6 +6,7 @@ class AIAssistant {
         this.generatedHabits = [];
         this.userChronotype = null;
         this.userSleepSchedule = null;
+        this.isDemoMode = false;
         this.init();
     }
 
@@ -14,16 +15,221 @@ class AIAssistant {
         this.loadUserChronotype();
         this.setupEventListeners();
         this.createChronotypeForm();
-
-        // Отладка: проверяем API ключ
-        console.log('API Key loaded:', this.apiKey ? 'Yes' : 'No');
-        console.log('Chronotype:', this.userChronotype);
+        this.checkAPIKeyStatus();
     }
 
     loadAPIKey() {
-        this.apiKey = localStorage.getItem('openai_api_key') || '';
+        const savedKey = localStorage.getItem('openai_api_key');
+        console.log('Loading API key from storage:', savedKey ? 'Key exists' : 'No key');
+        
+        // Проверяем, что ключ не пустой и не "undefined"
+        if (savedKey && savedKey !== 'undefined' && savedKey.trim() !== '') {
+            this.apiKey = savedKey.trim();
+            this.isDemoMode = false;
+            console.log('Valid API key loaded');
+        } else {
+            this.apiKey = '';
+            this.isDemoMode = true;
+            console.log('No valid API key, demo mode activated');
+            
+            // Удаляем пустой или невалидный ключ
+            localStorage.removeItem('openai_api_key');
+        }
     }
 
+     checkAPIKeyStatus() {
+        if (this.isDemoMode) {
+            console.log('Running in demo mode');
+            // Показываем уведомление о демо-режиме через 2 секунды
+            setTimeout(() => {
+                this.showDemoModeNotification();
+            }, 2000);
+        } else {
+            console.log('Running in full mode with API key');
+        }
+    }
+    showDemoModeNotification() {
+        // Проверяем, не показывали ли уже уведомление
+        if (localStorage.getItem('demo_notification_shown')) return;
+        
+        const notification = document.createElement('div');
+        notification.className = 'demo-mode-notification';
+        notification.innerHTML = `
+            <div class="notification-content">
+                <h4>🔑 ИИ Помощник в демо-режиме</h4>
+                <p>Для работы с полным функционалом ИИ-хронобиолога нужен OpenAI API ключ.</p>
+                <p>Вы можете:</p>
+                <ol>
+                    <li>Получить ключ на <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a></li>
+                    <li>Ввести его сейчас для полного доступа</li>
+                    <li>Продолжить в демо-режиме с примерами</li>
+                </ol>
+                <div class="notification-buttons">
+                    <button class="btn-small" id="addKeyNowBtn">Ввести ключ сейчас</button>
+                    <button class="btn-secondary" id="continueDemoBtn">Продолжить в демо</button>
+                </div>
+            </div>
+        `;
+        
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 9999;
+            max-width: 400px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+            animation: slideInRight 0.5s ease-out;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Обработчики кнопок
+        document.getElementById('addKeyNowBtn').addEventListener('click', () => {
+            this.showAPIKeyModal(true);
+            document.body.removeChild(notification);
+            localStorage.setItem('demo_notification_shown', 'true');
+        });
+        
+        document.getElementById('continueDemoBtn').addEventListener('click', () => {
+            document.body.removeChild(notification);
+            localStorage.setItem('demo_notification_shown', 'true');
+        });
+        
+        // Автоматически скрыть через 15 секунд
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+        }, 15000);
+    }
+    showAPIKeyModal(forceShow = false) {
+        // Если ключ уже есть и не форсируем показ
+        if (this.apiKey && !this.isDemoMode && !forceShow) {
+            console.log('API key already exists, skipping modal');
+            return;
+        }
+        
+        const savedKey = localStorage.getItem('openai_api_key');
+        let message = 'Для работы ИИ-помощника нужен OpenAI API ключ.\n\n';
+        message += '1. Получите ключ здесь: https://platform.openai.com/api-keys\n';
+        message += '2. Это безопасно - ключ хранится только в вашем браузере\n';
+        message += '3. Первые 3 месяца новые пользователи получают $5 бесплатно\n\n';
+        
+        if (savedKey && savedKey !== 'undefined' && savedKey.trim() !== '') {
+            message += `У вас сохранен ключ: ${savedKey.substring(0, 8)}...\n`;
+            message += 'Хотите ввести новый ключ?';
+        } else {
+            message += 'Введите ваш API ключ:';
+        }
+        
+        const apiKey = prompt(message, savedKey || '');
+        
+        if (apiKey === null) {
+            // Пользователь отменил
+            if (!this.apiKey) {
+                this.isDemoMode = true;
+            }
+            return;
+        }
+        
+        const trimmedKey = apiKey.trim();
+        
+        if (!trimmedKey) {
+            alert('Ключ не может быть пустым. ИИ-помощник будет работать в демо-режиме.');
+            this.isDemoMode = true;
+            return;
+        }
+        
+        // Базовая проверка формата ключа (начинается с sk-)
+        if (!trimmedKey.startsWith('sk-')) {
+            if (confirm('Ключ OpenAI обычно начинается с "sk-". Вы уверены, что это правильный ключ?')) {
+                this.saveAPIKey(trimmedKey);
+            } else {
+                this.showAPIKeyModal(true); // Показать снова
+            }
+        } else {
+            this.saveAPIKey(trimmedKey);
+        }
+    }
+
+    saveAPIKey(key) {
+        this.apiKey = key;
+        this.isDemoMode = false;
+        localStorage.setItem('openai_api_key', key);
+        localStorage.removeItem('demo_notification_shown'); // Сбрасываем флаг уведомления
+        
+        console.log('API key saved successfully');
+        
+        // Показываем успешное уведомление
+        this.showSuccessNotification('✅ API ключ сохранен! Теперь вы можете использовать полный функционал ИИ-помощника.');
+        
+        // Обновляем статус на странице
+        this.updateAPIStatusIndicator();
+    }
+    showSuccessNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'success-notification';
+        notification.textContent = message;
+        
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            z-index: 9999;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+            animation: slideInRight 0.5s ease-out;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                notification.style.animation = 'slideOutRight 0.5s ease-out forwards';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 500);
+            }
+        }, 3000);
+    }
+    updateAPIStatusIndicator() {
+        // Добавляем индикатор статуса API
+        let statusIndicator = document.getElementById('apiStatusIndicator');
+        
+        if (!statusIndicator) {
+            statusIndicator = document.createElement('div');
+            statusIndicator.id = 'apiStatusIndicator';
+            const header = document.querySelector('.ai-header');
+            if (header) {
+                header.appendChild(statusIndicator);
+            }
+        }
+        
+        if (this.isDemoMode) {
+            statusIndicator.innerHTML = `
+                <span class="api-status-demo">
+                    🔒 Демо-режим
+                    <button class="api-key-btn" onclick="aiAssistant.showAPIKeyModal(true)">Добавить ключ</button>
+                </span>
+            `;
+        } else {
+            statusIndicator.innerHTML = `
+                <span class="api-status-active">
+                    ✅ ИИ-хронобиолог активен
+                    <button class="api-key-btn" onclick="aiAssistant.showAPIKeyModal(true)">Сменить ключ</button>
+                </span>
+            `;
+        }
+    }
     loadUserChronotype() {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         if (currentUser) {
@@ -90,7 +296,7 @@ class AIAssistant {
                     </div>
                     
                     <div class="form-group">
-                        <label for="chronotypeGuess">Как вы себя считаете?</label>
+                        <label for="chronotypeGuess">Кем вы себя считаете?</label>
                         <select id="chronotypeGuess">
                             <option value="">Не знаю</option>
                             <option value="жаворонок">😴 Жаворонок</option>
@@ -199,25 +405,7 @@ class AIAssistant {
             });
         }
     }
-
-    showAPIKeyModal() {
-        const savedKey = localStorage.getItem('openai_api_key');
-        if (savedKey) {
-            console.log('Найден сохраненный ключ:', savedKey.substring(0, 10) + '...');
-            this.apiKey = savedKey;
-            return;
-        }
-        
-        const apiKey = prompt('Для работы ИИ-помощника нужен OpenAI API ключ.\n\nПолучите его здесь: https://platform.openai.com/api-keys\n\nВведите ваш API ключ:');
-        if (apiKey) {
-            this.apiKey = apiKey.trim();
-            localStorage.setItem('openai_api_key', this.apiKey);
-            console.log('Ключ сохранен:', this.apiKey.substring(0, 10) + '...');
-            alert('API ключ сохранен! Теперь вы можете использовать ИИ-помощника.');
-        } else {
-            alert('Без API ключа ИИ-помощник будет работать в демо-режиме.');
-        }
-    }
+    
 
     async analyzeChronotype() {
         if (!this.apiKey) {
@@ -532,51 +720,151 @@ class AIAssistant {
         return chronotypeRanges[this.userChronotype] || '9:00-18:00';
     }
 
-    async generateHabits() {
-    if (!this.apiKey) {
-        this.showAPIKeyModal();
-        if (!this.apiKey) return;
-    }
-
-    const goals = document.getElementById('goals').value;
-    const availableTime = document.getElementById('availableTime').value;
-    const experience = document.getElementById('experience').value;
-    const preferences = document.getElementById('preferences').value;
-
-    if (!goals.trim()) {
-        alert('Пожалуйста, укажите ваши цели');
-        return;
-    }
-
-    this.showLoading(true);
-
-    try {
-        // Используем улучшенный промпт для генерации
-        const prompt = this.buildHabitPrompt(goals, availableTime, experience, preferences);
-        console.log('Sending prompt to OpenAI:', prompt);
-        
-        const response = await this.callOpenAI(prompt, 'generate');
-        console.log('OpenAI response:', response);
-        
-        const habits = this.parseHabitsResponse(response);
-        console.log('Parsed habits:', habits);
-        
-        if (!habits || habits.length === 0) {
-            throw new Error('No habits generated');
+     async generateHabits() {
+        // Всегда показываем модалку если нет ключа и демо-режим
+        if (this.isDemoMode) {
+            const useDemo = confirm('Вы в демо-режиме. Хотите ввести API ключ для полного функционала?\n\nОК - ввести ключ\nОтмена - продолжить в демо-режиме');
+            
+            if (useDemo) {
+                this.showAPIKeyModal(true);
+                return; // Ждем пока пользователь введет ключ
+            }
+            // Продолжаем в демо-режиме
+        } else if (!this.apiKey) {
+            this.showAPIKeyModal(true);
+            if (!this.apiKey) return;
         }
-        
-        // Добавляем рекомендации по времени
-        const habitsWithTiming = await this.enhanceWithChronobiology(habits);
-        this.displayGeneratedHabits(habitsWithTiming);
-        
-    } catch (error) {
-        console.error('Error generating habits:', error);
-        // Только в случае реальной ошибки показываем демо
-        this.showDemoHabits();
-    } finally {
-        this.showLoading(false);
+
+        const goals = document.getElementById('goals').value;
+        const availableTime = document.getElementById('availableTime').value;
+        const experience = document.getElementById('experience').value;
+        const preferences = document.getElementById('preferences').value;
+
+        if (!goals.trim()) {
+            alert('Пожалуйста, укажите ваши цели');
+            return;
+        }
+
+        this.showLoading(true);
+
+        try {
+            let habits;
+            
+            if (this.isDemoMode) {
+                // Демо-режим: генерируем персонализированные демо-привычки
+                console.log('Generating demo habits');
+                habits = this.generatePersonalizedDemoHabits();
+            } else {
+                // Полный режим: используем OpenAI API
+                console.log('Generating habits with OpenAI API');
+                const prompt = this.buildHabitPrompt(goals, availableTime, experience, preferences);
+                const response = await this.callOpenAI(prompt, 'generate');
+                habits = this.parseHabitsResponse(response);
+            }
+            
+            // Добавляем рекомендации по времени
+            const habitsWithTiming = await this.enhanceWithChronobiology(habits);
+            this.displayGeneratedHabits(habitsWithTiming);
+            
+        } catch (error) {
+            console.error('Error generating habits:', error);
+            
+            // Если ошибка в полном режиме, пробуем демо
+            if (!this.isDemoMode) {
+                console.log('Falling back to demo mode due to API error');
+                const habits = this.generatePersonalizedDemoHabits();
+                const habitsWithTiming = await this.enhanceWithChronobiology(habits);
+                this.displayGeneratedHabits(habitsWithTiming);
+                
+                // Показываем предупреждение
+                this.showErrorNotification('Ошибка API. Показаны демо-привычки. Проверьте ваш API ключ.');
+            } else {
+                this.showDemoHabits();
+            }
+        } finally {
+            this.showLoading(false);
+        }
     }
-}
+    async sendMessage() {
+        const input = document.getElementById('chatInput');
+        const message = input.value.trim();
+
+        if (!message) return;
+
+        this.addMessageToChat('user', message);
+        input.value = '';
+        this.showChatLoading(true);
+
+        try {
+            let response;
+            
+            if (this.isDemoMode) {
+                // Демо-режим: используем локальные ответы
+                response = this.getDemoResponse(message);
+            } else {
+                // Полный режим: используем OpenAI API
+                let enhancedMessage = message;
+                if (this.containsTimeRelatedKeywords(message) && this.userChronotype) {
+                    enhancedMessage = `Пользователь с хронобиологическим типом "${this.userChronotype}" спрашивает: ${message}. Учти это в ответе.`;
+                }
+
+                response = await this.callOpenAI(enhancedMessage, 'chat');
+                
+                // Доработка ответов на основе контекста
+                response = await this.improveResponse(message, response);
+            }
+            
+            this.addMessageToChat('ai', response);
+            
+        } catch (error) {
+            console.error('Error in chat:', error);
+            
+            // Если ошибка в полном режиме, используем демо-ответ
+            if (!this.isDemoMode) {
+                const demoResponse = this.getDemoResponse(message);
+                this.addMessageToChat('ai', demoResponse);
+                this.showErrorNotification('Ошибка соединения. Используется демо-режим.');
+            } else {
+                const demoResponse = this.getDemoResponse(message);
+                this.addMessageToChat('ai', demoResponse);
+            }
+        } finally {
+            this.showChatLoading(false);
+        }
+    }
+
+    showErrorNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'error-notification';
+        notification.textContent = message;
+        
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #f44336;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            z-index: 9999;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+            animation: slideInRight 0.5s ease-out;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                notification.style.animation = 'slideOutRight 0.5s ease-out forwards';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 500);
+            }
+        }, 5000);
+    }
+
 
     buildHabitPrompt(goals, time, experience, preferences) {
     let chronotypeInfo = '';
@@ -1297,4 +1585,23 @@ showDemoHabits() {
 // Инициализация
 document.addEventListener('DOMContentLoaded', () => {
     window.aiAssistant = new AIAssistant();
+    
+    // Добавляем кнопку для управления API ключом в навигацию
+    setTimeout(() => {
+        const nav = document.querySelector('.nav-links');
+        if (nav) {
+            const apiKeyItem = document.createElement('li');
+            apiKeyItem.innerHTML = `
+                <a href="#" id="manageApiKeyBtn" style="color: #ff9800; font-weight: bold;">
+                    🔑 API Ключ
+                </a>
+            `;
+            nav.appendChild(apiKeyItem);
+            
+            document.getElementById('manageApiKeyBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                window.aiAssistant.showAPIKeyModal(true);
+            });
+        }
+    }, 1000);
 });
