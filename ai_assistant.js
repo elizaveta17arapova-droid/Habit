@@ -10,13 +10,23 @@ class AIAssistant {
     init() {
         this.loadAPIKey();
         this.setupEventListeners();
+         const resetBtn = document.getElementById('resetApiKeyBtn');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            localStorage.removeItem('openai_api_key');
+            alert('API ключ сброшен. Перезагрузите страницу.');
+            location.reload();
+        });
+    }
     }
 
     loadAPIKey() {
+        if(!this.apiKey){
+            this.showAPIKeyModal();
+        }
         this.apiKey = localStorage.getItem('openai_api_key') || '';
     }
-
-    showAPIKeyModal() {
+    owAPIKeyModal() {
         const savedKey = localStorage.getItem('openai_api_key');
         if (savedKey) {
             console.log('Найден сохраненный ключ:', savedKey.substring(0, 10) + '...');
