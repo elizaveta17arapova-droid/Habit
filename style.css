@@ -605,3 +605,70 @@ body.auth-page {
     background: #c82333;
     transform: translateY(-2px);
 }
+/* Стили для хронобиологии */
+.chronotype-results {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.chronotype-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+.chronotype-details {
+    margin: 15px 0;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}
+
+.recommendations ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.recommendations li {
+    margin: 8px 0;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.chrono-recommendation {
+    background: #f0f7ff;
+    border-left: 4px solid #667eea;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+.scientific-basis {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.analyze-chronotype-btn {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    margin: 10px 0;
+    transition: transform 0.3s ease;
+}
+
+.analyze-chronotype-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}

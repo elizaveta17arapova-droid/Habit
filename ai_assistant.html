@@ -61,7 +61,13 @@
                             <label for="preferences">Предпочтения и ограничения:</label>
                             <textarea id="preferences" placeholder="Например: нет тренажерного зала, работаю из дома, аллергия на..." rows="2"></textarea>
                         </div>
-
+                        <!-- Добавьте эту кнопку после формы предпочтений -->
+                        <div class="form-group">
+                            <button type="button" class="analyze-chronotype-btn" id="analyzeChronotypeBtn">
+                               🔬 Определить мой хронобиологический тип
+                            </button>
+                            <p class="help-text">Это поможет подобрать оптимальное время для привычек</p>
+                        </div>
                         <button type="submit" class="btn-primary" id="generateBtn">
                             <span id="btnText">Сгенерировать привычки</span>
                             <div class="spinner hidden" id="spinner"></div>
