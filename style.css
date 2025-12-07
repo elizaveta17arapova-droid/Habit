@@ -1231,3 +1231,34 @@ body.auth-page {
     50% { opacity: 0.8; }
     100% { opacity: 1; }
 }
+/* Стили для кнопки установки PWA */
+.pwa-install-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  z-index: 999;
+  display: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pwa-install-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
+
+.pwa-install-btn:active {
+  transform: translateY(0);
+}

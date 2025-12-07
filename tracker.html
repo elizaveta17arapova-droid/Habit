@@ -100,41 +100,11 @@
   <script src="tracker.js"></script>
   <script src="gamification.js"></script>
   <link rel="stylesheet" href="style_gamification.css">
-  <button onclick="installApp()" style="
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #667eea;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 20px;
-  border: none;
-  cursor: pointer;
-  display: none;" id="installBtn">
-  ⬇ Установить приложение
+  <button id="installBtn" class="pwa-install-btn">
+  📱 Установить приложение
 </button>
 
-<script>
-let deferredPrompt;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById('installBtn').style.display = 'block';
-});
-
-function installApp() {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choice) => {
-      if (choice.outcome === 'accepted') {
-        console.log('Приложение установлено!');
-      }
-      document.getElementById('installBtn').style.display = 'none';
-    });
-  }
-}
-</script>
+<script src="pwa-install.js"></script>
 </body>
 
 </html>
