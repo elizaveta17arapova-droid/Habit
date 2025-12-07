@@ -605,74 +605,7 @@ body.auth-page {
     background: #c82333;
     transform: translateY(-2px);
 }
-/* Стили для хронобиологии */
-.chronotype-results {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    margin: 20px 0;
-}
-
-.chronotype-card {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 15px;
-    border-radius: 8px;
-    backdrop-filter: blur(10px);
-}
-
-.chronotype-details {
-    margin: 15px 0;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
-}
-
-.recommendations ul {
-    list-style: none;
-    padding: 0;
-    margin: 10px 0;
-}
-
-.recommendations li {
-    margin: 8px 0;
-    padding: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-}
-
-.chrono-recommendation {
-    background: #f0f7ff;
-    border-left: 4px solid #667eea;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 4px;
-}
-
-.scientific-basis {
-    font-size: 0.9em;
-    color: #666;
-    margin-top: 5px;
-    font-style: italic;
-}
-
-.analyze-chronotype-btn {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 500;
-    margin: 10px 0;
-    transition: transform 0.3s ease;
-}
-
-.analyze-chronotype-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-/* Хронобиология */
+/* Хронобиология - Основные стили */
 .chrono-form-section {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -688,15 +621,30 @@ body.auth-page {
     backdrop-filter: blur(10px);
 }
 
+/* Форма ввода времени */
 .time-select {
     width: 100%;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 12px 15px;
+    border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.3);
     background: rgba(255, 255, 255, 0.1);
     color: white;
+    font-size: 16px;
+    transition: border-color 0.3s, background 0.3s;
 }
 
+.time-select:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.time-select option {
+    background: #764ba2;
+    color: white;
+}
+
+/* Периоды времени */
 .time-periods {
     display: flex;
     flex-wrap: wrap;
@@ -705,164 +653,348 @@ body.auth-page {
 }
 
 .time-checkbox {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 8px 15px;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 10px 15px;
     border-radius: 20px;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.3s ease;
+    user-select: none;
 }
 
 .time-checkbox:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
 }
 
 .time-checkbox input {
     margin-right: 8px;
+    accent-color: #667eea;
 }
 
+.time-checkbox span {
+    font-size: 14px;
+}
+
+/* Кнопки */
 .chronotype-buttons {
     display: flex;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 15px;
+    margin-top: 25px;
 }
 
 .analyze-chronotype-btn {
     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 14px 25px;
+    border-radius: 8px;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 16px;
     flex: 1;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Результаты хронобиологии */
+.analyze-chronotype-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.analyze-chronotype-btn:active {
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 14px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    flex: 1;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Результаты анализа */
 .chronotype-results {
     background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     color: white;
-    padding: 20px;
-    border-radius: 10px;
-    margin: 20px 0;
+    padding: 25px;
+    border-radius: 12px;
+    margin: 25px 0;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .chronotype-card {
     background: rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 8px;
+    padding: 25px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
 }
 
+/* Заголовок результатов */
 .chronotype-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 .chronotype-badge {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 5px 15px;
-    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 165, 0, 0.3) 100%);
+    padding: 8px 20px;
+    border-radius: 25px;
     font-weight: bold;
+    font-size: 18px;
+    border: 2px solid rgba(255, 215, 0, 0.5);
 }
 
 .confidence-badge {
     background: rgba(255, 255, 255, 0.2);
-    padding: 3px 10px;
-    border-radius: 10px;
-    font-size: 0.9em;
+    padding: 6px 15px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Детали типа */
+.chronotype-description {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    opacity: 0.9;
 }
 
 .chronotype-details {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 20px;
+    border-radius: 8px;
     margin: 20px 0;
 }
 
 .detail-item {
     display: flex;
     justify-content: space-between;
-    padding: 10px 0;
+    align-items: center;
+    padding: 12px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: 600;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-label::before {
+    content: "✓";
+    color: #4CAF50;
+}
+
+.detail-value {
+    font-weight: 500;
+    font-size: 16px;
+    opacity: 0.95;
+}
+
+/* Расписание рекомендаций */
+.schedule-recommendations {
+    margin-top: 25px;
+}
+
+.schedule-recommendations h5 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #ffd700;
 }
 
 .schedule-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    margin-top: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
 }
 
 .schedule-item {
     background: rgba(255, 255, 255, 0.1);
-    padding: 15px;
-    border-radius: 8px;
+    padding: 20px;
+    border-radius: 10px;
+    transition: transform 0.3s ease, background 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.schedule-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .schedule-time {
     font-weight: bold;
     color: #ffd700;
-    margin-bottom: 5px;
+    font-size: 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.schedule-time::before {
+    content: "⏰";
+}
+
+.schedule-activity {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+    opacity: 0.9;
 }
 
 .schedule-reason {
-    font-size: 0.9em;
-    opacity: 0.9;
-    margin-top: 5px;
+    font-size: 14px;
+    opacity: 0.8;
+    font-style: italic;
+    line-height: 1.4;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Рекомендации в карточках привычек */
 .chrono-recommendation {
-    background: #f0f7ff;
+    background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%);
     border-left: 4px solid #4facfe;
-    padding: 12px;
-    margin: 15px 0;
-    border-radius: 0 5px 5px 0;
+    padding: 18px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(79, 172, 254, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(79, 172, 254, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(79, 172, 254, 0); }
+}
+
+.chrono-recommendation strong {
+    color: #4facfe;
+    font-size: 16px;
+    display: block;
+    margin-bottom: 8px;
 }
 
 .scientific-basis {
-    font-size: 0.9em;
-    color: #666;
-    margin-top: 5px;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
     font-style: italic;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(79, 172, 254, 0.2);
 }
 
-/* Чат */
+/* Чат с ИИ */
 .message {
-    margin: 10px 0;
-    padding: 12px 15px;
-    border-radius: 15px;
-    max-width: 80%;
+    margin: 15px 0;
+    padding: 15px 20px;
+    border-radius: 18px;
+    max-width: 85%;
+    position: relative;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .user-message {
-    background: #e3f2fd;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
     margin-left: auto;
     border-bottom-right-radius: 5px;
 }
 
 .ai-message {
-    background: #f5f5f5;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    color: #333;
     margin-right: auto;
     border-bottom-left-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .message-sender {
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.user-message .message-sender {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.ai-message .message-sender {
+    color: #667eea;
+}
+
+.message-content {
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.user-message .message-content {
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.ai-message .message-content {
+    color: #333;
 }
 
 .message-time {
-    font-size: 0.8em;
-    color: #999;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
     text-align: right;
-    margin-top: 5px;
+    margin-top: 8px;
 }
 
+.ai-message .message-time {
+    color: #666;
+}
+
+/* Спиннер загрузки */
 .chat-spinner {
     width: 20px;
     height: 20px;
-    border: 2px solid #f3f3f3;
-    border-top: 2px solid #667eea;
+    border: 3px solid rgba(102, 126, 234, 0.2);
+    border-top: 3px solid #667eea;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin: 0 auto;
@@ -873,21 +1005,76 @@ body.auth-page {
     100% { transform: rotate(360deg); }
 }
 
-/* Кнопки */
+/* Кнопки привычек */
 .add-to-tracker-btn {
-    background: #4CAF50;
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
     color: white;
     border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
+    padding: 14px 20px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s;
+    font-weight: 600;
+    font-size: 15px;
     width: 100%;
-    margin-top: 10px;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
 }
 
 .add-to-tracker-btn:hover {
-    background: #45a049;
+    background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+}
+
+.add-to-tracker-btn:active {
+    transform: translateY(0);
+}
+
+.add-to-tracker-btn::before {
+    content: "➕";
+    font-size: 18px;
+}
+
+/* Уведомления */
+.habit-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    color: white;
+    padding: 18px 25px;
+    border-radius: 10px;
+    z-index: 1000;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+    animation: slideInRight 0.3s ease-out, slideOutRight 0.3s ease-in 2.7s;
+    max-width: 350px;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
 }
 
 /* Адаптивность */
@@ -898,9 +1085,108 @@ body.auth-page {
     
     .time-periods {
         flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .time-checkbox {
+        justify-content: center;
+        padding: 12px;
     }
     
     .schedule-grid {
         grid-template-columns: 1fr;
     }
+    
+    .chronotype-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .message {
+        max-width: 90%;
+        padding: 12px 15px;
+    }
+    
+    .chrono-recommendation {
+        padding: 15px;
+    }
+    
+    .detail-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .detail-value {
+        font-size: 15px;
+        opacity: 0.9;
+    }
+}
+
+@media (max-width: 480px) {
+    .chrono-form-section {
+        padding: 15px;
+    }
+    
+    .chronotype-results {
+        padding: 20px 15px;
+    }
+    
+    .chronotype-card {
+        padding: 20px 15px;
+    }
+    
+    .analyze-chronotype-btn,
+    .btn-secondary {
+        padding: 12px 20px;
+        font-size: 15px;
+    }
+    
+    .add-to-tracker-btn {
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+}
+
+/* Текстовые стили для подсказок */
+.help-text {
+    font-size: 14px;
+    opacity: 0.9;
+    margin: 10px 0 20px 0;
+    line-height: 1.5;
+}
+
+.quiz-question {
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+
+.quiz-question p {
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: #333;
+}
+
+.modal-content {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+/* Плавная прокрутка */
+.chronotype-results,
+.chrono-form-section {
+    scroll-margin-top: 20px;
 }
