@@ -14,6 +14,10 @@ class AIAssistant {
         this.loadUserChronotype();
         this.setupEventListeners();
         this.createChronotypeForm();
+
+        // Отладка: проверяем API ключ
+        console.log('API Key loaded:', this.apiKey ? 'Yes' : 'No');
+        console.log('Chronotype:', this.userChronotype);
     }
 
     loadAPIKey() {
@@ -529,76 +533,324 @@ class AIAssistant {
     }
 
     async generateHabits() {
-        if (!this.apiKey) {
-            this.showAPIKeyModal();
-            if (!this.apiKey) return;
-        }
-
-        const goals = document.getElementById('goals').value;
-        const availableTime = document.getElementById('availableTime').value;
-        const experience = document.getElementById('experience').value;
-        const preferences = document.getElementById('preferences').value;
-
-        if (!goals.trim()) {
-            alert('Пожалуйста, укажите ваши цели');
-            return;
-        }
-
-        this.showLoading(true);
-
-        try {
-            const prompt = this.buildHabitPrompt(goals, availableTime, experience, preferences);
-            const response = await this.callOpenAI(prompt, 'generate');
-            const habits = this.parseHabitsResponse(response);
-            
-            const habitsWithTiming = await this.enhanceWithChronobiology(habits);
-            this.displayGeneratedHabits(habitsWithTiming);
-        } catch (error) {
-            console.error('Error generating habits:', error);
-            this.showDemoHabits();
-        } finally {
-            this.showLoading(false);
-        }
+    if (!this.apiKey) {
+        this.showAPIKeyModal();
+        if (!this.apiKey) return;
     }
 
-    buildHabitPrompt(goals, time, experience, preferences) {
-        let chronotypeInfo = '';
-        if (this.userChronotype) {
-            chronotypeInfo = `\nХронобиологический тип пользователя: ${this.userChronotype}\nОптимальное время активности: ${this.getOptimalTimeRange()}`;
-            
-            if (this.userSleepSchedule) {
-                chronotypeInfo += `\nРежим сна: ${this.userSleepSchedule}`;
-            }
+    const goals = document.getElementById('goals').value;
+    const availableTime = document.getElementById('availableTime').value;
+    const experience = document.getElementById('experience').value;
+    const preferences = document.getElementById('preferences').value;
+
+    if (!goals.trim()) {
+        alert('Пожалуйста, укажите ваши цели');
+        return;
+    }
+
+    this.showLoading(true);
+
+    try {
+        // Используем улучшенный промпт для генерации
+        const prompt = this.buildHabitPrompt(goals, availableTime, experience, preferences);
+        console.log('Sending prompt to OpenAI:', prompt);
+        
+        const response = await this.callOpenAI(prompt, 'generate');
+        console.log('OpenAI response:', response);
+        
+        const habits = this.parseHabitsResponse(response);
+        console.log('Parsed habits:', habits);
+        
+        if (!habits || habits.length === 0) {
+            throw new Error('No habits generated');
         }
+        
+        // Добавляем рекомендации по времени
+        const habitsWithTiming = await this.enhanceWithChronobiology(habits);
+        this.displayGeneratedHabits(habitsWithTiming);
+        
+    } catch (error) {
+        console.error('Error generating habits:', error);
+        // Только в случае реальной ошибки показываем демо
+        this.showDemoHabits();
+    } finally {
+        this.showLoading(false);
+    }
+}
 
-        return `Создай персонализированный план из 3-5 привычек для пользователя.
+    buildHabitPrompt(goals, time, experience, preferences) {
+    let chronotypeInfo = '';
+    if (this.userChronotype) {
+        chronotypeInfo = `\nХронобиологический тип: ${this.userChronotype}`;
+    }
 
-Основные цели: ${goals}
-Свободное время: ${time} минут в день
-Уровень опыта: ${experience}
-Ограничения: ${preferences || 'нет'}${chronotypeInfo}
+    return `Ты эксперт по формированию привычек. Создай ПЕРСОНАЛИЗИРОВАННЫЙ план привычек для пользователя.
 
-Для каждой привычки учти оптимальное время выполнения на основе хронобиологии пользователя.
-Указывай конкретное рекомендуемое время (например, "7:00-8:00 утра" или "18:00-19:00 вечера").
+ВАЖНО: Учитывай ВСЕ параметры пользователя:
+1. Цели: "${goals}"
+2. Доступное время в день: ${time} минут
+3. Уровень опыта: ${experience}
+4. Ограничения: ${preferences || 'нет'}
+${chronotypeInfo}
 
-Верни ответ в строгом JSON формате:
+ГЕНЕРИРУЙ РЕАЛЬНЫЕ ПРИВЫЧКИ, которые соответствуют:
+- Времени пользователя (${time} минут в день распредели на все привычки)
+- Целям пользователя ("${goals}")
+- Опыту пользователя (${experience})
+- Ограничениям ("${preferences}")
+
+Если пользователь говорит "нет времени" - создай короткие привычки по 5-15 минут.
+
+Пример для "прокачать английский, 2+ часа, начинающий":
+1. Аудирование: 30 минут в день
+2. Чтение: 20 минут в день  
+3. Практика разговорной речи: 15 минут в день
+
+Верни ответ ТОЛЬКО в этом JSON формате (не добавляй текста до или после):
 {
     "habits": [
         {
-            "name": "Название привычки",
-            "description": "Подробное описание что делать",
-            "category": "здоровье/продуктивность/обучение/отдых",
+            "name": "Название привычки (максимум 5 слов)",
+            "description": "Конкретное описание что делать, 1-2 предложения",
+            "category": "обучение/здоровье/продуктивность/отдых/развитие",
             "duration": "X минут",
-            "frequency": "ежедневно/несколько раз в неделю",
+            "frequency": "ежедневно/3 раза в неделю",
             "difficulty": "легкая/средняя/сложная",
-            "optimal_time": "рекомендованное время на основе биоритмов",
-            "scientific_basis": "краткое научное обоснование почему это время оптимально",
+            "optimal_time": "рекомендованное время",
+            "scientific_basis": "научное обоснование",
             "benefits": ["польза 1", "польза 2", "польза 3"],
-            "tips": ["практический совет 1", "совет 2"]
+            "tips": ["совет 1", "совет 2", "совет 3"]
         }
     ]
-}`;
+}
+
+Создай 3-5 привычек, которые РЕАЛЬНО помогут достичь целей пользователя.`;
+}
+
+async callOpenAI(prompt, mode = 'generate') {
+    try {
+        const response = await fetch(this.apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.apiKey}`
+            },
+            body: JSON.stringify({
+                model: 'gpt-3.5-turbo',
+                messages: [
+                    {
+                        role: 'system',
+                        content: mode === 'generate' 
+                            ? `Ты эксперт по формированию привычек. Твоя задача - создавать РЕАЛЬНЫЕ персонализированные привычки на основе ВСЕХ параметров пользователя. Всегда отвечай ТОЛЬКО в JSON формате без лишнего текста.
+                               
+                               ПРАВИЛА:
+                               1. Учитывай ВСЕ данные пользователя
+                               2. Длительность привычек должна соответствовать доступному времени
+                               3. Сложность должна соответствовать опыту пользователя
+                               4. Привычки должны быть достижимыми и реалистичными
+                               5. Если пользователь "начинающий" - делай привычки легкими`
+                            : 'Ты полезный ассистент по привычкам.'
+                    },
+                    {
+                        role: 'user',
+                        content: prompt
+                    }
+                ],
+                temperature: 0.8, // Более креативные ответы
+                max_tokens: 1500, // Больше токенов для детальных ответов
+                response_format: mode === 'generate' ? { type: "json_object" } : undefined
+            })
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('API error details:', errorText);
+            throw new Error(`API error: ${response.status} - ${errorText}`);
+        }
+
+        const data = await response.json();
+        console.log('API response data:', data);
+        
+        if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+            throw new Error('Invalid API response format');
+        }
+        
+        return data.choices[0].message.content;
+    } catch (error) {
+        console.error('Error in callOpenAI:', error);
+        throw error;
     }
+}
+
+parseHabitsResponse(content) {
+    console.log('Parsing response:', content);
+    
+    try {
+        // Очищаем ответ от возможного лишнего текста
+        let cleanedContent = content.trim();
+        
+        // Ищем JSON в ответе
+        const jsonStart = cleanedContent.indexOf('{');
+        const jsonEnd = cleanedContent.lastIndexOf('}') + 1;
+        
+        if (jsonStart === -1 || jsonEnd === 0) {
+            throw new Error('No JSON found in response');
+        }
+        
+        const jsonString = cleanedContent.substring(jsonStart, jsonEnd);
+        console.log('Extracted JSON:', jsonString);
+        
+        const parsed = JSON.parse(jsonString);
+        
+        if (!parsed.habits || !Array.isArray(parsed.habits) || parsed.habits.length === 0) {
+            throw new Error('No habits array in response');
+        }
+        
+        // Проверяем и корректируем данные привычек
+        const validatedHabits = parsed.habits.map((habit, index) => {
+            return {
+                name: habit.name || `Привычка ${index + 1}`,
+                description: habit.description || 'Описание привычки',
+                category: habit.category || 'развитие',
+                duration: habit.duration || '10 минут',
+                frequency: habit.frequency || 'ежедневно',
+                difficulty: habit.difficulty || 'легкая',
+                optimal_time: habit.optimal_time || 'утром',
+                scientific_basis: habit.scientific_basis || 'Научное обоснование',
+                benefits: Array.isArray(habit.benefits) ? habit.benefits : ['Польза для развития'],
+                tips: Array.isArray(habit.tips) ? habit.tips : ['Начните с малого']
+            };
+        });
+        
+        console.log('Validated habits:', validatedHabits);
+        return validatedHabits;
+        
+    } catch (error) {
+        console.error('Error parsing habits:', error, 'Content was:', content);
+        
+        // Только в случае реального парсинга ошибки возвращаем демо
+        // Но с учетом введенных параметров
+        return this.generatePersonalizedDemoHabits();
+    }
+}
+
+generatePersonalizedDemoHabits() {
+    // Получаем данные пользователя для персонализации демо
+    const goals = document.getElementById('goals').value.toLowerCase();
+    const time = document.getElementById('availableTime').value;
+    const experience = document.getElementById('experience').value;
+    
+    let habits = [];
+    
+    // Персонализируем демо-привычки на основе введенных данных
+    if (goals.includes('английск') || goals.includes('english') || goals.includes('язык')) {
+        habits = [
+            {
+                name: "Прослушивание подкастов на английском",
+                description: "Слушайте английские подкасты во время commute или домашних дел",
+                category: "обучение",
+                duration: "30 минут",
+                frequency: "ежедневно",
+                difficulty: "легкая",
+                optimal_time: "утром по дороге на работу/учебу",
+                scientific_basis: "Пассивное восприятие улучшает аудирование",
+                benefits: ["Улучшение понимания на слух", "Расширение словарного запаса", "Привыкание к акцентам"],
+                tips: ["Начните с медленных подкастов", "Используйте субтитры", "Повторяйте услышанные фразы"]
+            },
+            {
+                name: "Чтение статей на английском",
+                description: "Читайте интересные статьи или новости на английском",
+                category: "обучение",
+                duration: "20 минут",
+                frequency: "ежедневно",
+                difficulty: "средняя",
+                optimal_time: "обеденный перерыв",
+                scientific_basis: "Чтение активирует визуальную память",
+                benefits: ["Улучшение чтения", "Новая лексика", "Понимание грамматики в контексте"],
+                tips: ["Читайте о том, что вам интересно", "Выписывайте незнакомые слова", "Не переводите каждое слово"]
+            },
+            {
+                name: "Разговорная практика с приложением",
+                description: "Говорите на английском с помощью языковых приложений",
+                category: "обучение",
+                duration: "15 минут",
+                frequency: "ежедневно",
+                difficulty: "легкая",
+                optimal_time: "вечером",
+                scientific_basis: "Говорение активирует речевой аппарат",
+                benefits: ["Преодоление языкового барьера", "Улучшение произношения", "Автоматизация речевых конструкций"],
+                tips: ["Начните с простых фраз", "Записывайте себя", "Не бойтесь ошибок"]
+            }
+        ];
+    } else if (goals.includes('спорт') || goals.includes('фитнес') || goals.includes('тренировк')) {
+        habits = [
+            {
+                name: "Утренняя зарядка",
+                description: "Комплекс упражнений для разминки и тонуса мышц",
+                category: "здоровье",
+                duration: "15 минут",
+                frequency: "ежедневно",
+                difficulty: "легкая",
+                optimal_time: "7:00-8:00",
+                scientific_basis: "Утренние тренировки ускоряют метаболизм",
+                benefits: ["Повышение энергии", "Улучшение настроения", "Укрепление мышц"],
+                tips: ["Начинайте с растяжки", "Слушайте свое тело", "Постепенно увеличивайте нагрузку"]
+            }
+        ];
+    } else {
+        // Общие привычки на основе доступного времени
+        const totalTime = parseInt(time) || 30;
+        habits = [
+            {
+                name: "Короткая медитация",
+                description: "5-минутная практика осознанности и дыхания",
+                category: "здоровье",
+                duration: "5 минут",
+                frequency: "ежедневно",
+                difficulty: "легкая",
+                optimal_time: "утром после пробуждения",
+                scientific_basis: "Медитация снижает стресс и улучшает концентрацию",
+                benefits: ["Снижение стресса", "Улучшение фокуса", "Эмоциональный баланс"],
+                tips: ["Найдите тихое место", "Сфокусируйтесь на дыхании", "Не оценивайте свои мысли"]
+            },
+            {
+                name: "Чтение для развития",
+                description: "Чтение полезной литературы или статей",
+                category: "развитие",
+                duration: `${Math.min(15, Math.floor(totalTime/2))} минут`,
+                frequency: "ежедневно",
+                difficulty: experience === 'beginner' ? "легкая" : "средняя",
+                optimal_time: "вечером перед сном",
+                scientific_basis: "Вечернее чтение расслабляет и развивает",
+                benefits: ["Расширение кругозора", "Улучшение памяти", "Развитие критического мышления"],
+                tips: ["Выбирайте интересные темы", "Делайте заметки", "Обсуждайте прочитанное"]
+            }
+        ];
+    }
+    
+    return habits;
+}
+
+showDemoHabits() {
+    console.log('Showing demo habits as fallback');
+    const demoHabits = this.generatePersonalizedDemoHabits();
+    this.displayGeneratedHabits(demoHabits);
+    
+    // Показываем сообщение, что это демо
+    const resultsSection = document.getElementById('resultsSection');
+    if (resultsSection) {
+        const demoNotice = document.createElement('div');
+        demoNotice.className = 'demo-notice';
+        demoNotice.innerHTML = `
+            <div class="demo-notice-content">
+                <strong>⚠️ Демо-режим</strong>
+                <p>Для получения персонализированных привычек на основе ИИ введите OpenAI API ключ.</p>
+                <p>Сейчас показаны примеры на основе ваших данных.</p>
+            </div>
+        `;
+        resultsSection.insertBefore(demoNotice, resultsSection.firstChild);
+    }
+}
 
     async enhanceWithChronobiology(habits) {
         if (!this.userChronotype) {

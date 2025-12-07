@@ -1190,3 +1190,44 @@ body.auth-page {
 .chrono-form-section {
     scroll-margin-top: 20px;
 }
+/* Уведомление о демо-режиме */
+.demo-notice {
+    background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%);
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+    border-left: 5px solid #ff5722;
+}
+
+.demo-notice-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.demo-notice strong {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.demo-notice strong::before {
+    content: "⚠️";
+}
+
+.demo-notice p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+    opacity: 0.9;
+}
+
+/* Анимация пульсации для уведомлений */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.8; }
+    100% { opacity: 1; }
+}
