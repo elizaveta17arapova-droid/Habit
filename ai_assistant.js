@@ -1,5 +1,5 @@
 class AIAssistant {
-     constructor() {
+    constructor() {
         this.apiKey = '';
         this.apiUrl = 'https://api.openai.com/v1/chat/completions';
         this.conversationHistory = [];
@@ -13,13 +13,14 @@ class AIAssistant {
         this.loadAPIKey();
         this.loadUserChronotype();
         this.setupEventListeners();
+        this.createChronotypeForm();
     }
 
     loadAPIKey() {
         this.apiKey = localStorage.getItem('openai_api_key') || '';
     }
+
     loadUserChronotype() {
-        // Загружаем сохраненные данные о хронобиологии пользователя
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         if (currentUser) {
             const userData = JSON.parse(localStorage.getItem('user_' + currentUser.email) || '{}');
@@ -28,23 +29,138 @@ class AIAssistant {
         }
     }
 
-    showAPIKeyModal() {
-        const savedKey = localStorage.getItem('openai_api_key');
-        if (savedKey) {
-            console.log('Найден сохраненный ключ:', savedKey.substring(0, 10) + '...');
-            this.apiKey = savedKey;
+    createChronotypeForm() {
+        // Проверяем, есть ли уже форма
+        if (document.getElementById('chronotypeForm')) return;
+
+        const preferencesForm = document.querySelector('.preferences-form');
+        if (!preferencesForm) return;
+
+        const chronotypeHTML = `
+            <div class="chrono-form-section">
+                <h3>⏰ Хронобиологический профиль</h3>
+                <p class="help-text">Определите ваш тип для оптимального подбора времени привычек</p>
+                
+                <div class="chrono-form" id="chronotypeForm">
+                    <div class="form-group">
+                        <label for="wakeupTime">Во сколько вы обычно просыпаетесь?</label>
+                        <select id="wakeupTime" class="time-select">
+                            <option value="">Выберите время</option>
+                            <option value="4:00">4:00</option>
+                            <option value="5:00">5:00</option>
+                            <option value="6:00">6:00</option>
+                            <option value="7:00">7:00</option>
+                            <option value="8:00">8:00</option>
+                            <option value="9:00">9:00</option>
+                            <option value="10:00">10:00</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sleepTime">Во сколько вы обычно ложитесь спать?</label>
+                        <select id="sleepTime" class="time-select">
+                            <option value="">Выберите время</option>
+                            <option value="20:00">20:00</option>
+                            <option value="21:00">21:00</option>
+                            <option value="22:00">22:00</option>
+                            <option value="23:00">23:00</option>
+                            <option value="0:00">0:00</option>
+                            <option value="1:00">1:00</option>
+                            <option value="2:00">2:00</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Когда у вас пик энергии?</label>
+                        <div class="time-periods">
+                            <label class="time-checkbox">
+                                <input type="checkbox" name="energyPeak" value="утро"> Утро (6-9)
+                            </label>
+                            <label class="time-checkbox">
+                                <input type="checkbox" name="energyPeak" value="день"> День (10-14)
+                            </label>
+                            <label class="time-checkbox">
+                                <input type="checkbox" name="energyPeak" value="вечер"> Вечер (15-20)
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="chronotypeGuess">Как вы себя считаете?</label>
+                        <select id="chronotypeGuess">
+                            <option value="">Не знаю</option>
+                            <option value="жаворонок">😴 Жаворонок</option>
+                            <option value="голубь">🕊️ Голубь</option>
+                            <option value="сова">🦉 Сова</option>
+                        </select>
+                    </div>
+                    
+                    <div class="chronotype-buttons">
+                        <button type="button" class="btn-secondary" id="saveManualChronotypeBtn">
+                            💾 Сохранить профиль
+                        </button>
+                        <button type="button" class="analyze-chronotype-btn" id="analyzeChronotypeBtn">
+                            🔬 Автоматический анализ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Вставляем после формы предпочтений
+        preferencesForm.insertAdjacentHTML('afterend', chronotypeHTML);
+
+        // Назначаем обработчики событий
+        this.setupChronotypeListeners();
+    }
+
+    setupChronotypeListeners() {
+        const saveManualBtn = document.getElementById('saveManualChronotypeBtn');
+        const analyzeBtn = document.getElementById('analyzeChronotypeBtn');
+
+        if (saveManualBtn) {
+            saveManualBtn.addEventListener('click', () => this.saveManualChronotype());
+        }
+
+        if (analyzeBtn) {
+            analyzeBtn.addEventListener('click', () => this.analyzeChronotype());
+        }
+    }
+
+    saveManualChronotype() {
+        const wakeup = document.getElementById('wakeupTime').value;
+        const sleep = document.getElementById('sleepTime').value;
+        const energyCheckboxes = document.querySelectorAll('input[name="energyPeak"]:checked');
+        const energyPeaks = Array.from(energyCheckboxes).map(cb => cb.value);
+        const guess = document.getElementById('chronotypeGuess').value;
+
+        if (!wakeup || !sleep) {
+            alert('Пожалуйста, укажите время пробуждения и сна');
             return;
         }
+
+        const chronotypeData = {
+            chronotype: guess || this.calculateSimpleChronotype(wakeup, sleep),
+            optimal_wakeup: wakeup,
+            optimal_sleep: sleep,
+            productivity_peaks: energyPeaks.length > 0 ? energyPeaks : ['день'],
+            description: 'Определено на основе ручного ввода',
+            confidence: 'средняя'
+        };
+
+        this.saveChronotypeData(chronotypeData);
+        this.displayChronotypeResults(chronotypeData);
+    }
+
+    calculateSimpleChronotype(wakeup, sleep) {
+        const wakeupHour = parseInt(wakeup.split(':')[0]);
+        const sleepHour = parseInt(sleep.split(':')[0]);
         
-        const apiKey = prompt('Для работы ИИ-помощника нужен OpenAI API ключ.\n\nПолучите его здесь: https://platform.openai.com/api-keys\n\nВведите ваш API ключ:');
-        if (apiKey) {
-            this.apiKey = apiKey.trim();
-            localStorage.setItem('openai_api_key', this.apiKey);
-            console.log('Ключ сохранен:', this.apiKey.substring(0, 10) + '...');
-            alert('API ключ сохранен! Теперь вы можете использовать ИИ-помощника.');
-        } else {
-            alert('Без API ключа ИИ-помощник будет работать в демо-режиме.');
-        }
+        if (sleepHour >= 22) sleepHour -= 24; // Коррекция для ночных часов
+        
+        if (wakeupHour <= 6 && sleepHour <= 22) return 'жаворонок';
+        if (wakeupHour >= 9) return 'сова';
+        return 'голубь';
     }
 
     setupEventListeners() {
@@ -78,156 +194,25 @@ class AIAssistant {
                 this.addAllToTracker();
             });
         }
-        // Кнопка для определения хронобиологии
-        const analyzeChronotypeBtn = document.getElementById('analyzeChronotypeBtn');
-        if (analyzeChronotypeBtn) {
-            analyzeChronotypeBtn.addEventListener('click', () => {
-                this.analyzeChronotype();
-            });
-        }
     }
 
-    async generateHabits() {
-        if (!this.apiKey) {
-            this.showAPIKeyModal();
-            if (!this.apiKey) return; // Если пользователь отменил ввод ключа
-        }
-
-        const goals = document.getElementById('goals').value;
-        const availableTime = document.getElementById('availableTime').value;
-        const experience = document.getElementById('experience').value;
-        const preferences = document.getElementById('preferences').value;
-
-        if (!goals.trim()) {
-            alert('Пожалуйста, укажите ваши цели');
+    showAPIKeyModal() {
+        const savedKey = localStorage.getItem('openai_api_key');
+        if (savedKey) {
+            console.log('Найден сохраненный ключ:', savedKey.substring(0, 10) + '...');
+            this.apiKey = savedKey;
             return;
         }
-
-        this.showLoading(true);
-
-        try {
-            const prompt = this.buildHabitPrompt(goals, availableTime, experience, preferences);
-            const response = await this.callOpenAI(prompt, 'generate');
-            const habits = this.parseHabitsResponse(response);
-            
-            // Добавляем рекомендации по времени на основе хронобиологии
-            const habitsWithTiming = await this.enhanceWithChronobiology(habits);
-            
-            this.displayGeneratedHabits(habitsWithTiming);
-        } catch (error) {
-            console.error('Error generating habits:', error);
-            this.showDemoHabits();
-        } finally {
-            this.showLoading(false);
-        }
-    }
-
-    buildHabitPrompt(goals, time, experience, preferences) {
-        let chronotypeInfo = '';
-        if (this.userChronotype) {
-            chronotypeInfo = `Хронобиологический тип пользователя: ${this.userChronotype}\nОптимальное время активности: ${this.getOptimalTimeRange()}`;
-        }
-
-        return `Создай персонализированный план из 3-5 привычек для пользователя:
-
-Основные цели: ${goals}
-Свободное время: ${time} минут в день
-Уровень опыта: ${experience}
-Ограничения: ${preferences || 'нет'}
-${chronotypeInfo}
-
-Для каждой привычки учитывай оптимальное время выполнения на основе хронобиологии:
-- Утренние часы (6-9): физическая активность, творческие задачи
-- Обеденное время (12-14): легкие задачи, перерывы
-- Вечерние часы (18-21): размышления, планирование, рутинные задачи
-
-Верни ответ в JSON формате:
-{
-    "habits": [
-        {
-            "name": "Название привычки",
-            "description": "Описание",
-            "category": "здоровье/продуктивность/обучение/отдых",
-            "duration": "X минут",
-            "frequency": "ежедневно",
-            "difficulty": "легкая/средняя/сложная",
-            "optimal_time": "рекомендованное время на основе биоритмов",
-            "scientific_basis": "научное обоснование времени выполнения",
-            "benefits": ["польза 1", "польза 2"],
-            "tips": ["совет 1", "совет 2"]
-        }
-    ]
-}`;
-    }
-
-    getOptimalTimeRange() {
-        if (!this.userChronotype) return 'Не определено';
         
-        const chronotypeRanges = {
-            'жаворонок': '6:00-12:00 (утренняя активность)',
-            'голубь': '9:00-15:00 (дневная активность)',
-            'сова': '15:00-21:00 (вечерняя активность)',
-            'дельфин': '10:00-16:00 (переменная активность)'
-        };
-        
-        return chronotypeRanges[this.userChronotype] || '9:00-18:00 (стандартная активность)';
-    }
-
-    async enhanceWithChronobiology(habits) {
-        if (!this.userChronotype) {
-            // Если хронобиология не определена, добавляем стандартные рекомендации
-            return habits.map(habit => ({
-                ...habit,
-                optimal_time: this.getDefaultOptimalTime(habit.category),
-                scientific_basis: habit.scientific_basis || 'Общие рекомендации на основе типа привычки'
-            }));
+        const apiKey = prompt('Для работы ИИ-помощника нужен OpenAI API ключ.\n\nПолучите его здесь: https://platform.openai.com/api-keys\n\nВведите ваш API ключ:');
+        if (apiKey) {
+            this.apiKey = apiKey.trim();
+            localStorage.setItem('openai_api_key', this.apiKey);
+            console.log('Ключ сохранен:', this.apiKey.substring(0, 10) + '...');
+            alert('API ключ сохранен! Теперь вы можете использовать ИИ-помощника.');
+        } else {
+            alert('Без API ключа ИИ-помощник будет работать в демо-режиме.');
         }
-
-        try {
-            const prompt = `На основе хронобиологического типа "${this.userChronotype}" и сна ${this.userSleepSchedule}, оптимизируй время выполнения привычек:
-            
-            Привычки для оптимизации: ${JSON.stringify(habits.map(h => ({name: h.name, category: h.category})))}
-            
-            Верни JSON с оптимизированным временем для каждой привычки в формате:
-            {
-                "optimized_habits": [
-                    {
-                        "name": "название привычки",
-                        "optimal_time": "рекомендованное время",
-                        "scientific_basis": "научное обоснование"
-                    }
-                ]
-            }`;
-            
-            const response = await this.callOpenAI(prompt, 'optimize');
-            const optimization = this.parseOptimizationResponse(response);
-            
-            return habits.map(habit => {
-                const optimized = optimization.find(h => h.name === habit.name);
-                return {
-                    ...habit,
-                    optimal_time: optimized?.optimal_time || this.getDefaultOptimalTime(habit.category),
-                    scientific_basis: optimized?.scientific_basis || 'Рекомендация на основе общего хронобиологического профиля'
-                };
-            });
-        } catch (error) {
-            console.error('Error optimizing habits:', error);
-            return habits.map(habit => ({
-                ...habit,
-                optimal_time: this.getDefaultOptimalTime(habit.category),
-                scientific_basis: 'Общие рекомендации на основе хронобиологии'
-            }));
-        }
-    }
-
-    getDefaultOptimalTime(category) {
-        const timeMap = {
-            'здоровье': '6:00-8:00 или 17:00-19:00',
-            'продуктивность': '9:00-11:00 или 15:00-17:00',
-            'обучение': '10:00-12:00 или 19:00-21:00',
-            'отдых': '13:00-15:00 или 20:00-22:00'
-        };
-        return timeMap[category] || '9:00-18:00';
     }
 
     async analyzeChronotype() {
@@ -236,38 +221,148 @@ ${chronotypeInfo}
             if (!this.apiKey) return;
         }
 
-        const questions = [
-            "В какое время вы обычно просыпаетесь без будильника?",
-            "Когда вы чувствуете наибольший прилив энергии?",
-            "В какое время суток вам легче всего концентрироваться?",
-            "Когда вы предпочитаете ложиться спать?",
-            "Как вы чувствуете себя при раннем пробуждении?"
-        ];
+        const chronotypeFormHTML = `
+            <div class="chronotype-quiz">
+                <h3>📊 Хронобиологический тест</h3>
+                
+                <div class="quiz-question">
+                    <p>1. В какое время вы <strong>естественно просыпаетесь</strong> без будильника?</p>
+                    <select id="q1" class="time-select">
+                        <option value="4-5">4:00-5:00</option>
+                        <option value="5-6">5:00-6:00</option>
+                        <option value="6-7">6:00-7:00</option>
+                        <option value="7-8">7:00-8:00</option>
+                        <option value="8-9" selected>8:00-9:00</option>
+                        <option value="9-10">9:00-10:00</option>
+                        <option value="10+">После 10:00</option>
+                    </select>
+                </div>
+                
+                <div class="quiz-question">
+                    <p>2. Когда вы чувствуете <strong>максимальную продуктивность</strong>?</p>
+                    <select id="q2">
+                        <option value="утро">Утро (6:00-10:00)</option>
+                        <option value="день" selected>День (10:00-15:00)</option>
+                        <option value="вечер">Вечер (15:00-21:00)</option>
+                        <option value="ночь">Ночь (после 21:00)</option>
+                    </select>
+                </div>
+                
+                <div class="quiz-question">
+                    <p>3. Во сколько вы <strong>обычно ложитесь спать</strong>?</p>
+                    <select id="q3" class="time-select">
+                        <option value="20-21">20:00-21:00</option>
+                        <option value="21-22">21:00-22:00</option>
+                        <option value="22-23" selected>22:00-23:00</option>
+                        <option value="23-0">23:00-00:00</option>
+                        <option value="0-1">00:00-01:00</option>
+                        <option value="1+">После 1:00</option>
+                    </select>
+                </div>
+                
+                <div class="quiz-question">
+                    <p>4. Как вы <strong>себя ощущаете</strong> по утрам?</p>
+                    <select id="q4">
+                        <option value="бодрый">Бодрый и свежий</option>
+                        <option value="средне" selected>Нормально</option>
+                        <option value="сонный">Сонный и разбитый</option>
+                    </select>
+                </div>
+                
+                <div class="quiz-question">
+                    <p>5. Когда вам <strong>легче учиться новому</strong>?</p>
+                    <select id="q5">
+                        <option value="утро">Утром</option>
+                        <option value="день" selected>Днем</option>
+                        <option value="вечер">Вечером</option>
+                    </select>
+                </div>
+            </div>
+        `;
 
-        const answers = [];
-        for (let i = 0; i < questions.length; i++) {
-            const answer = prompt(questions[i] + "\n\nОтвет будет использован для определения вашего хронобиологического типа.");
-            if (answer === null) return; // Пользователь отменил
-            answers.push(answer);
-        }
+        const modal = document.createElement('div');
+        modal.className = 'chronotype-modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                ${chronotypeFormHTML}
+                <div class="modal-buttons">
+                    <button id="cancelBtn" class="btn-secondary">Отмена</button>
+                    <button id="submitBtn" class="btn-primary">Проанализировать</button>
+                </div>
+            </div>
+        `;
 
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        `;
+
+        const modalContent = modal.querySelector('.modal-content');
+        modalContent.style.cssText = `
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        `;
+
+        document.body.appendChild(modal);
+
+        return new Promise((resolve) => {
+            modal.querySelector('#cancelBtn').addEventListener('click', () => {
+                document.body.removeChild(modal);
+                resolve(null);
+            });
+
+            modal.querySelector('#submitBtn').addEventListener('click', async () => {
+                const answers = {
+                    q1: modal.querySelector('#q1').value,
+                    q2: modal.querySelector('#q2').value,
+                    q3: modal.querySelector('#q3').value,
+                    q4: modal.querySelector('#q4').value,
+                    q5: modal.querySelector('#q5').value
+                };
+
+                document.body.removeChild(modal);
+                await this.processChronotypeAnswers(answers);
+                resolve();
+            });
+        });
+    }
+
+    async processChronotypeAnswers(answers) {
         try {
-            const prompt = `Проанализируй ответы пользователя для определения хронобиологического типа (жаворонок, голубь, сова, дельфин):
+            const prompt = `Проанализируй ответы на хронобиологический тест и определи тип (жаворонок, сова, голубь):
             
-            Ответы: ${JSON.stringify(answers)}
+            1. Время естественного пробуждения: ${answers.q1}
+            2. Пик продуктивности: ${answers.q2}
+            3. Время отхода ко сну: ${answers.q3}
+            4. Ощущение по утрам: ${answers.q4}
+            5. Лучшее время для обучения: ${answers.q5}
             
-            Также определи оптимальное расписание для привычек.
+            Определи хронобиологический тип и дай рекомендации по расписанию.
             
             Верни ответ в JSON формате:
             {
                 "chronotype": "тип",
-                "description": "описание типа",
+                "confidence": "высокая/средняя/низкая",
+                "description": "описание типа и характеристик",
+                "optimal_wakeup": "рекомендуемое время пробуждения",
                 "optimal_sleep": "рекомендуемое время сна",
-                "peak_performance": "периоды наивысшей продуктивности",
-                "habit_recommendations": [
+                "productivity_peaks": ["пик 1", "пик 2"],
+                "recommendations": [
                     {
-                        "time": "время",
-                        "activity": "рекомендуемая активность",
+                        "time_range": "6:00-9:00",
+                        "activities": ["рекомендованные активности"],
                         "reason": "обоснование"
                     }
                 ]
@@ -277,9 +372,10 @@ ${chronotypeInfo}
             const chronotypeData = this.parseChronotypeResponse(response);
             this.saveChronotypeData(chronotypeData);
             this.displayChronotypeResults(chronotypeData);
+            
         } catch (error) {
-            console.error('Error analyzing chronotype:', error);
-            alert('Не удалось определить хронобиологический тип. Попробуйте позже.');
+            console.error('Error processing chronotype:', error);
+            this.showSimpleChronotypeForm();
         }
     }
 
@@ -294,24 +390,12 @@ ${chronotypeInfo}
             console.error('Error parsing chronotype response:', error);
             return {
                 chronotype: 'голубь',
+                confidence: 'средняя',
                 description: 'Стандартный тип с равномерной активностью в течение дня',
-                optimal_sleep: '23:00-7:00',
-                peak_performance: '9:00-12:00 и 15:00-18:00'
+                optimal_wakeup: '7:00-8:00',
+                optimal_sleep: '23:00-24:00',
+                productivity_peaks: ['9:00-12:00', '15:00-18:00']
             };
-        }
-    }
-
-    parseOptimizationResponse(content) {
-        try {
-            const jsonMatch = content.match(/\{[\s\S]*\}/);
-            if (jsonMatch) {
-                const parsed = JSON.parse(jsonMatch[0]);
-                return parsed.optimized_habits || [];
-            }
-            throw new Error('No JSON found');
-        } catch (error) {
-            console.error('Error parsing optimization response:', error);
-            return [];
         }
     }
 
@@ -333,40 +417,259 @@ ${chronotypeInfo}
         
         localStorage.setItem('user_' + currentUser.email, JSON.stringify(userData));
         
-        alert(`Ваш хронобиологический тип: ${data.chronotype}\n\nДанные сохранены для персонализации привычек.`);
+        alert(`✅ Ваш хронобиологический тип: ${data.chronotype}\n\nДанные сохранены для персонализации привычек.`);
     }
 
     displayChronotypeResults(data) {
-        const resultsDiv = document.getElementById('chronotypeResults');
+        let resultsDiv = document.getElementById('chronotypeResults');
+        
         if (!resultsDiv) {
-            // Создаем элемент для отображения результатов
+            resultsDiv = document.createElement('div');
+            resultsDiv.id = 'chronotypeResults';
+            resultsDiv.className = 'chronotype-results';
+            
             const container = document.querySelector('.ai-content');
-            const resultsElement = document.createElement('div');
-            resultsElement.className = 'chronotype-results';
-            resultsElement.id = 'chronotypeResults';
-            resultsElement.innerHTML = `
-                <h3>Результаты анализа хронобиологии</h3>
-                <div class="chronotype-card">
-                    <h4>Ваш тип: ${data.chronotype}</h4>
-                    <p>${data.description}</p>
-                    <div class="chronotype-details">
-                        <p><strong>Оптимальное время сна:</strong> ${data.optimal_sleep}</p>
-                        <p><strong>Пики продуктивности:</strong> ${data.peak_performance}</p>
-                    </div>
-                    ${data.habit_recommendations ? `
-                    <div class="recommendations">
-                        <strong>Рекомендации по времени привычек:</strong>
-                        <ul>
-                            ${data.habit_recommendations.map(rec => 
-                                `<li><strong>${rec.time}:</strong> ${rec.activity} (${rec.reason})</li>`
-                            ).join('')}
-                        </ul>
-                    </div>
-                    ` : ''}
-                </div>
-            `;
-            container.insertBefore(resultsElement, document.querySelector('.ai-chat'));
+            const chatSection = document.querySelector('.ai-chat');
+            container.insertBefore(resultsDiv, chatSection);
         }
+
+        const recommendationsHTML = data.recommendations ? data.recommendations.map(rec => `
+            <div class="schedule-item">
+                <div class="schedule-time">${rec.time_range}</div>
+                <div class="schedule-activity">${Array.isArray(rec.activities) ? rec.activities.join(', ') : rec.activities}</div>
+                <div class="schedule-reason">${rec.reason}</div>
+            </div>
+        `).join('') : '';
+
+        resultsDiv.innerHTML = `
+            <h3>📊 Результаты анализа хронобиологии</h3>
+            <div class="chronotype-card">
+                <div class="chronotype-header">
+                    <h4>Ваш тип: <span class="chronotype-badge">${data.chronotype}</span></h4>
+                    <span class="confidence-badge">${data.confidence || 'средняя'} точность</span>
+                </div>
+                <p class="chronotype-description">${data.description}</p>
+                
+                <div class="chronotype-details">
+                    <div class="detail-item">
+                        <span class="detail-label">⏰ Оптимальное пробуждение:</span>
+                        <span class="detail-value">${data.optimal_wakeup}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">🌙 Оптимальный сон:</span>
+                        <span class="detail-value">${data.optimal_sleep}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">⚡ Пики продуктивности:</span>
+                        <span class="detail-value">${Array.isArray(data.productivity_peaks) ? data.productivity_peaks.join(', ') : data.productivity_peaks}</span>
+                    </div>
+                </div>
+                
+                ${recommendationsHTML ? `
+                <div class="schedule-recommendations">
+                    <h5>📅 Рекомендуемое расписание:</h5>
+                    <div class="schedule-grid">
+                        ${recommendationsHTML}
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+        `;
+    }
+
+    normalizeTimeInput(timeInput) {
+        if (!timeInput) return '9:00-18:00';
+        
+        const timeKeywords = {
+            'утро': '6:00-9:00',
+            'утром': '6:00-9:00',
+            'день': '12:00-15:00',
+            'днем': '12:00-15:00',
+            'вечер': '18:00-21:00',
+            'вечером': '18:00-21:00',
+            'ночь': '22:00-4:00',
+            'ночью': '22:00-4:00'
+        };
+        
+        const lowerInput = timeInput.toLowerCase().trim();
+        
+        for (const [keyword, timeRange] of Object.entries(timeKeywords)) {
+            if (lowerInput.includes(keyword)) {
+                return timeRange;
+            }
+        }
+        
+        const timeRegex = /(\d{1,2})[:\.]?(\d{2})?/;
+        const match = timeInput.match(timeRegex);
+        
+        if (match) {
+            let hours = parseInt(match[1]);
+            const minutes = match[2] ? parseInt(match[2]) : 0;
+            
+            if (hours < 10) hours = '0' + hours;
+            const mins = minutes < 10 ? '0' + minutes : minutes;
+            
+            return `${hours}:${mins}`;
+        }
+        
+        return '9:00-18:00';
+    }
+
+    getOptimalTimeRange() {
+        if (!this.userChronotype) return 'Не определено';
+        
+        const chronotypeRanges = {
+            'жаворонок': '6:00-12:00',
+            'голубь': '9:00-15:00',
+            'сова': '15:00-21:00',
+            'дельфин': '10:00-16:00'
+        };
+        
+        return chronotypeRanges[this.userChronotype] || '9:00-18:00';
+    }
+
+    async generateHabits() {
+        if (!this.apiKey) {
+            this.showAPIKeyModal();
+            if (!this.apiKey) return;
+        }
+
+        const goals = document.getElementById('goals').value;
+        const availableTime = document.getElementById('availableTime').value;
+        const experience = document.getElementById('experience').value;
+        const preferences = document.getElementById('preferences').value;
+
+        if (!goals.trim()) {
+            alert('Пожалуйста, укажите ваши цели');
+            return;
+        }
+
+        this.showLoading(true);
+
+        try {
+            const prompt = this.buildHabitPrompt(goals, availableTime, experience, preferences);
+            const response = await this.callOpenAI(prompt, 'generate');
+            const habits = this.parseHabitsResponse(response);
+            
+            const habitsWithTiming = await this.enhanceWithChronobiology(habits);
+            this.displayGeneratedHabits(habitsWithTiming);
+        } catch (error) {
+            console.error('Error generating habits:', error);
+            this.showDemoHabits();
+        } finally {
+            this.showLoading(false);
+        }
+    }
+
+    buildHabitPrompt(goals, time, experience, preferences) {
+        let chronotypeInfo = '';
+        if (this.userChronotype) {
+            chronotypeInfo = `\nХронобиологический тип пользователя: ${this.userChronotype}\nОптимальное время активности: ${this.getOptimalTimeRange()}`;
+            
+            if (this.userSleepSchedule) {
+                chronotypeInfo += `\nРежим сна: ${this.userSleepSchedule}`;
+            }
+        }
+
+        return `Создай персонализированный план из 3-5 привычек для пользователя.
+
+Основные цели: ${goals}
+Свободное время: ${time} минут в день
+Уровень опыта: ${experience}
+Ограничения: ${preferences || 'нет'}${chronotypeInfo}
+
+Для каждой привычки учти оптимальное время выполнения на основе хронобиологии пользователя.
+Указывай конкретное рекомендуемое время (например, "7:00-8:00 утра" или "18:00-19:00 вечера").
+
+Верни ответ в строгом JSON формате:
+{
+    "habits": [
+        {
+            "name": "Название привычки",
+            "description": "Подробное описание что делать",
+            "category": "здоровье/продуктивность/обучение/отдых",
+            "duration": "X минут",
+            "frequency": "ежедневно/несколько раз в неделю",
+            "difficulty": "легкая/средняя/сложная",
+            "optimal_time": "рекомендованное время на основе биоритмов",
+            "scientific_basis": "краткое научное обоснование почему это время оптимально",
+            "benefits": ["польза 1", "польза 2", "польза 3"],
+            "tips": ["практический совет 1", "совет 2"]
+        }
+    ]
+}`;
+    }
+
+    async enhanceWithChronobiology(habits) {
+        if (!this.userChronotype) {
+            return habits.map(habit => ({
+                ...habit,
+                optimal_time: this.getDefaultOptimalTime(habit.category),
+                scientific_basis: habit.scientific_basis || 'Общие рекомендации на основе типа привычки'
+            }));
+        }
+
+        try {
+            const prompt = `На основе хронобиологического типа "${this.userChronotype}" оптимизируй время выполнения привычек:
+            
+            Привычки для оптимизации: ${JSON.stringify(habits.map(h => ({name: h.name, category: h.category, duration: h.duration})))}
+            
+            Учти что пользователь ${this.userChronotype}. Дай научно обоснованные рекомендации по времени.
+            
+            Верни JSON в формате:
+            {
+                "optimized_habits": [
+                    {
+                        "name": "название привычки",
+                        "optimal_time": "рекомендованное время (например, 7:00-8:00)",
+                        "scientific_basis": "научное обоснование почему это время оптимально"
+                    }
+                ]
+            }`;
+            
+            const response = await this.callOpenAI(prompt, 'optimize');
+            const optimization = this.parseOptimizationResponse(response);
+            
+            return habits.map(habit => {
+                const optimized = optimization.find(h => h.name === habit.name);
+                return {
+                    ...habit,
+                    optimal_time: optimized?.optimal_time || this.getDefaultOptimalTime(habit.category),
+                    scientific_basis: optimized?.scientific_basis || habit.scientific_basis || 'Рекомендация на основе хронобиологического профиля'
+                };
+            });
+        } catch (error) {
+            console.error('Error optimizing habits:', error);
+            return habits.map(habit => ({
+                ...habit,
+                optimal_time: this.getDefaultOptimalTime(habit.category),
+                scientific_basis: 'Общие рекомендации на основе хронобиологии'
+            }));
+        }
+    }
+
+    parseOptimizationResponse(content) {
+        try {
+            const jsonMatch = content.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                const parsed = JSON.parse(jsonMatch[0]);
+                return parsed.optimized_habits || [];
+            }
+            throw new Error('No JSON found');
+        } catch (error) {
+            console.error('Error parsing optimization response:', error);
+            return [];
+        }
+    }
+
+    getDefaultOptimalTime(category) {
+        const timeMap = {
+            'здоровье': '6:00-8:00 или 17:00-19:00',
+            'продуктивность': '9:00-11:00 или 15:00-17:00',
+            'обучение': '10:00-12:00 или 19:00-21:00',
+            'отдых': '13:00-15:00 или 20:00-22:00'
+        };
+        return timeMap[category] || '9:00-18:00';
     }
 
     async sendMessage() {
@@ -384,17 +687,13 @@ ${chronotypeInfo}
                 throw new Error('No API key');
             }
 
-            // Улучшаем промпт с учетом хронобиологии при вопросах о времени
             let enhancedMessage = message;
             if (this.containsTimeRelatedKeywords(message) && this.userChronotype) {
-                enhancedMessage = `Пользователь с хронобиологическим типом "${this.userChronotype}" спрашивает: ${message}. Учти это в ответе.`;
+                enhancedMessage = `Пользователь с хронобиологическим типом "${this.userChronotype}" (оптимальное время активности: ${this.getOptimalTimeRange()}) спрашивает: ${message}. Учти хронобиологические особенности в ответе и дай персонализированные рекомендации.`;
             }
 
             const response = await this.callOpenAI(enhancedMessage, 'chat');
-            
-            // Доработка ответов на основе контекста
             const improvedResponse = await this.improveResponse(message, response);
-            
             this.addMessageToChat('ai', improvedResponse);
         } catch (error) {
             console.error('Error in chat:', error);
@@ -406,25 +705,24 @@ ${chronotypeInfo}
     }
 
     containsTimeRelatedKeywords(message) {
-        const keywords = ['время', 'когда', 'утро', 'день', 'вечер', 'ночь', 'расписание', 'график', 'биоритм', 'хроно'];
+        const keywords = ['время', 'когда', 'утро', 'день', 'вечер', 'ночь', 'расписание', 'график', 'биоритм', 'хроно', 'режим', 'распорядок'];
         const lowerMessage = message.toLowerCase();
         return keywords.some(keyword => lowerMessage.includes(keyword));
     }
 
     async improveResponse(userQuestion, aiResponse) {
-        // Если ответ короткий или общий, улучшаем его
         if (aiResponse.length < 100 || this.isGenericResponse(aiResponse)) {
             try {
                 const improvementPrompt = `Пользователь спросил: "${userQuestion}"
 ИИ ответил: "${aiResponse}"
                 
-Улучши этот ответ, сделав его более:
-1. Персонализированным (учти возможные цели пользователя)
-2. Практичным (добавь конкретные шаги)
-3. Научно обоснованным (при необходимости)
-4. Мотивирующим
+Улучши этот ответ:
+1. Сделай более персонализированным (учти возможные цели пользователя)
+2. Добавь практические шаги
+3. Приведи научное обоснование если уместно
+4. Сделай мотивирующим
 
-Улучшенный ответ:`;
+Улучшенный ответ (на русском):`;
                 
                 const improved = await this.callOpenAI(improvementPrompt, 'improve');
                 return improved || aiResponse;
@@ -441,9 +739,7 @@ ${chronotypeInfo}
             'я не уверен',
             'не могу сказать',
             'зависит от ситуации',
-            'это индивидуально',
-            'попробуйте',
-            'рекомендую'
+            'это индивидуально'
         ];
         return genericPhrases.some(phrase => response.toLowerCase().includes(phrase));
     }
@@ -452,19 +748,23 @@ ${chronotypeInfo}
         const lowerMessage = message.toLowerCase();
         
         if (lowerMessage.includes('привет')) {
-            return 'Привет! Я ваш помощник по привычкам. Введите API ключ для полного функционала.';
+            return 'Привет! Я ваш ИИ-помощник по привычкам. Определите ваш хронобиологический тип для получения персонализированных рекомендаций.';
         }
         
         if (lowerMessage.includes('привычк')) {
-            return 'Для новых привычек начинайте с 2-5 минут в день. Главное - регулярность!';
+            return 'Начинайте с маленьких привычек (2-5 минут). Регулярность важнее длительности!';
         }
         
         if (lowerMessage.includes('мотивац')) {
-            return 'Мотивация приходит с действием! Начните с маленьких шагов.';
+            return 'Мотивация следует за действием. Начните с малого и отслеживайте прогресс.';
         }
         
-        if (lowerMessage.includes('врем')) {
-            return 'Для привычек лучше выделять постоянное время дня.';
+        if (lowerMessage.includes('врем') || lowerMessage.includes('когда')) {
+            return 'Определите ваш хронобиологический тип для получения рекомендаций по оптимальному времени привычек.';
+        }
+        
+        if (lowerMessage.includes('хрон') || lowerMessage.includes('биоритм')) {
+            return 'Хронобиология изучает оптимальное время для различных активностей. Определите ваш тип для персонализации.';
         }
         
         return 'Я демо-версия ИИ помощника. Для полного функционала введите OpenAI API ключ.';
@@ -483,16 +783,18 @@ ${chronotypeInfo}
                     {
                         role: 'system',
                         content: mode === 'generate' 
-                            ? 'Ты эксперт по формированию привычек. Всегда отвечай в valid JSON формате.'
-                            : 'Ты полезный ассистент по привычкам.'
+                            ? 'Ты эксперт по формированию привычек и хронобиологии. Всегда отвечай в строгом JSON формате когда требуется.'
+                            : mode === 'analyze'
+                            ? 'Ты эксперт по хронобиологии. Анализируй ответы и предоставляй рекомендации в JSON формате.'
+                            : 'Ты полезный ассистент по привычкам и хронобиологии. Отвечай подробно и научно обоснованно.'
                     },
                     {
                         role: 'user',
                         content: prompt
                     }
                 ],
-                temperature: 0.7,
-                max_tokens: mode === 'generate' ? 1000 : 500
+                temperature: mode === 'generate' ? 0.7 : 0.8,
+                max_tokens: mode === 'generate' ? 1000 : 800
             })
         });
 
@@ -521,24 +823,28 @@ ${chronotypeInfo}
     generateDemoHabits() {
         return [
             {
-                name: "Утренняя зарядка 5 минут",
-                description: "Легкие упражнения для пробуждения тела",
+                name: "Утренняя растяжка 5 минут",
+                description: "Легкие упражнения на растяжку для пробуждения тела",
                 category: "здоровье",
                 duration: "5 минут",
                 frequency: "ежедневно",
                 difficulty: "легкая",
-                benefits: ["Улучшение кровообращения", "Повышение энергии"],
-                tips: ["Делайте после пробуждения", "Начните с растяжек"]
+                optimal_time: "7:00-8:00",
+                scientific_basis: "Утренняя растяжка улучшает кровообращение и гибкость",
+                benefits: ["Улучшение осанки", "Повышение энергии", "Снятие напряжения"],
+                tips: ["Делайте после пробуждения", "Дышите глубоко", "Не торопитесь"]
             },
             {
-                name: "Чтение 10 минут в день",
-                description: "Развивающее чтение для личностного роста",
-                category: "обучение",
+                name: "Вечерний дневник 10 минут",
+                description: "Запись мыслей и рефлексия за день",
+                category: "отдых",
                 duration: "10 минут",
                 frequency: "ежедневно",
                 difficulty: "легкая",
-                benefits: ["Расширение кругозора", "Улучшение концентрации"],
-                tips: ["Выберите книгу заранее", "Читайте в спокойной обстановке"]
+                optimal_time: "21:00-22:00",
+                scientific_basis: "Вечерняя рефлексия улучшает сон и снижает стресс",
+                benefits: ["Снижение стресса", "Улучшение самопонимания", "Лучший сон"],
+                tips: ["Записывайте 3 хорошие вещи за день", "Не редактируйте мысли", "Будьте честны"]
             }
         ];
     }
@@ -595,12 +901,14 @@ ${chronotypeInfo}
                 </ul>
             </div>
             <div class="habit-tips">
-                <strong>Советы:</strong>
+                <strong>Практические советы:</strong>
                 <ul>
                     ${habit.tips.map(tip => `<li>${tip}</li>`).join('')}
                 </ul>
             </div>
-            <button class="btn-small" onclick="aiAssistant.addToTracker(${index})">Добавить в трекер</button>
+            <button class="btn-small add-to-tracker-btn" onclick="aiAssistant.addToTracker(${index})">
+                ➕ Добавить в трекер
+            </button>
         `;
         return div;
     }
@@ -608,7 +916,30 @@ ${chronotypeInfo}
     addToTracker(habitIndex) {
         const habit = this.generatedHabits[habitIndex];
         this.saveHabitToTracker(habit);
-        alert(`Привычка "${habit.name}" добавлена в трекер!`);
+        
+        // Показываем уведомление
+        const notification = document.createElement('div');
+        notification.className = 'habit-notification';
+        notification.innerHTML = `
+            ✅ Привычка "${habit.name}" добавлена в трекер!
+            <br><small>Оптимальное время: ${habit.optimal_time}</small>
+        `;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        `;
+        
+        document.body.appendChild(notification);
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 3000);
     }
 
     addAllToTracker() {
@@ -621,7 +952,7 @@ ${chronotypeInfo}
             this.saveHabitToTracker(habit);
         });
 
-        alert(`Все ${this.generatedHabits.length} привычек добавлены в трекер!`);
+        alert(`✅ Все ${this.generatedHabits.length} привычек добавлены в трекер!`);
     }
 
     saveHabitToTracker(habit) {
@@ -638,7 +969,11 @@ ${chronotypeInfo}
             done: false,
             date: new Date().toISOString().split('T')[0],
             description: habit.description,
-            category: habit.category
+            category: habit.category,
+            optimal_time: habit.optimal_time,
+            duration: habit.duration,
+            added_from_ai: true,
+            added_at: new Date().toISOString()
         };
 
         userHabits.push(newHabit);
@@ -649,7 +984,8 @@ ${chronotypeInfo}
         aiHabits.push({
             ...habit,
             addedAt: new Date().toISOString(),
-            userId: currentUser.email
+            userId: currentUser.email,
+            chronotype: this.userChronotype
         });
         localStorage.setItem('ai_generated_habits', JSON.stringify(aiHabits));
     }
@@ -662,7 +998,9 @@ ${chronotypeInfo}
         messageDiv.className = `message ${sender}-message`;
         
         messageDiv.innerHTML = `
+            <div class="message-sender">${sender === 'user' ? 'Вы' : 'ИИ-помощник'}</div>
             <div class="message-content">${this.formatMessage(message)}</div>
+            ${sender === 'ai' ? `<div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>` : ''}
         `;
         
         chatMessages.appendChild(messageDiv);
@@ -670,7 +1008,11 @@ ${chronotypeInfo}
     }
 
     formatMessage(message) {
-        return message.replace(/\n/g, '<br>');
+        // Форматируем сообщение с сохранением переносов и добавлением стилей
+        return message
+            .replace(/\n/g, '<br>')
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>');
     }
 
     showLoading(show) {
@@ -680,11 +1022,11 @@ ${chronotypeInfo}
 
         if (btnText && spinner && generateBtn) {
             if (show) {
-                btnText.textContent = 'Генерация...';
+                btnText.textContent = 'Анализ хронобиологии и генерация...';
                 spinner.classList.remove('hidden');
                 generateBtn.disabled = true;
             } else {
-                btnText.textContent = 'Сгенерировать привычки';
+                btnText.textContent = 'Сгенерировать персонализированные привычки';
                 spinner.classList.add('hidden');
                 generateBtn.disabled = false;
             }
@@ -695,7 +1037,7 @@ ${chronotypeInfo}
         const sendBtn = document.getElementById('sendMessageBtn');
         if (sendBtn) {
             sendBtn.disabled = show;
-            sendBtn.textContent = show ? '...' : 'Отправить';
+            sendBtn.innerHTML = show ? '<div class="chat-spinner"></div>' : 'Отправить';
         }
     }
 }
