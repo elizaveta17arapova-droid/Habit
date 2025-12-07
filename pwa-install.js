@@ -1,52 +1,62 @@
-// Простая установка PWA
-class PWAInstall {
-  constructor() {
-    this.setup();
+// pwa-install.js - ПОЛНОСТЬЮ ЗАМЕНИТЕ
+(function() {
+  console.log('PWA Install script loading...');
+  
+  const installBtn = document.getElementById('installBtn');
+  if (!installBtn) {
+    console.warn('Кнопка установки не найдена');
+    return;
   }
-
-  setup() {
-    // Регистрируем Service Worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js');
-    }
-
-    // Показываем кнопку установки
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      this.showInstallBtn(e);
-    });
-  }
-
-  showInstallBtn(event) {
-    const btn = document.createElement('button');
-    btn.innerHTML = '📱 Установить приложение';
-    btn.style.cssText = `
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #667eea;
-      color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      z-index: 1000;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    `;
+  
+  installBtn.style.display = 'none';
+  
+  let deferredPrompt;
+  
+  // Показываем/скрываем кнопку
+  window.addEventListener('beforeinstallprompt', (e) => {
+    console.log('beforeinstallprompt fired');
+    e.preventDefault();
+    deferredPrompt = e;
     
-    btn.onclick = () => this.installApp(event);
-    document.body.appendChild(btn);
+    installBtn.style.display = 'block';
+    
+    installBtn.onclick = async () => {
+      if (!deferredPrompt) return;
+      
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`User ${outcome} the install`);
+      
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
+    };
+  });
+  
+  // Скрыть после установки
+  window.addEventListener('appinstalled', () => {
+    console.log('App installed successfully');
+    installBtn.style.display = 'none';
+    deferredPrompt = null;
+  });
+  
+  // Проверка уже установленного приложения
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    console.log('Running in standalone mode');
+    installBtn.style.display = 'none';
   }
-
-  installApp(event) {
-    event.prompt();
-    event.userChoice.then((choice) => {
-      if (choice.outcome === 'accepted') {
-        console.log('✅ Приложение установлено!');
-      }
-    });
+  
+  // Service Worker регистрация (ТОЛЬКО если на localhost или HTTPS)
+  if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => {
+          console.log('✅ Service Worker registered:', reg);
+        })
+        .catch(err => {
+          console.error('❌ Service Worker registration failed:', err);
+        });
+    }
+  } else {
+    console.log('Service Worker requires HTTP(S) protocol');
   }
-}
-
-// Запускаем при загрузке
-new PWAInstall();
+})();
