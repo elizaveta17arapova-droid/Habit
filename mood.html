@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Tracker</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .mood-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .mood-title {
+            text-align: center;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+
+        .mood-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .mood-btn {
+            flex: 1;
+            padding: 15px;
+            font-size: 24px;
+            border-radius: 15px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .mood-btn:hover {
+            transform: scale(1.05);
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            margin-top: 20px;
+        }
+
+        .save-btn {
+            margin-top: 15px;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            background: #6c63ff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mood-container">
+        <h1 class="mood-title">😊 Mood Tracker</h1>
+
+        <!-- Эмоции -->
+        <div class="mood-buttons">
+            <button class="mood-btn" data-value="5">😄</button>
+            <button class="mood-btn" data-value="4">🙂</button>
+            <button class="mood-btn" data-value="3">😐</button>
+            <button class="mood-btn" data-value="2">🙁</button>
+            <button class="mood-btn" data-value="1">😭</button>
+        </div>
+
+        <!-- График -->
+        <canvas id="moodChart"></canvas>
+
+        <!-- Комментарий -->
+        <textarea id="moodComment" placeholder="Комментарий дня..."></textarea>
+        <button class="save-btn" id="saveMood">Сохранить</button>
+    </div>
+
+    <script src="mood.js"></script>
+</body>
+
+</html>

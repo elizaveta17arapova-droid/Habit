@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Музыкальная поддержка</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .music-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .music-title {
+            text-align: center;
+            font-size: 26px;
+            margin-bottom: 25px;
+        }
+
+        .music-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .music-btn {
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .playlist-block {
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 200px;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="music-container">
+        <h1 class="music-title">🎵 Музыкальная поддержка</h1>
+
+        <!-- Кнопки переключения -->
+        <div class="music-buttons">
+            <button class="music-btn" data-type="focus">🔥 Фокус</button>
+            <button class="music-btn" data-type="relax">😌 Расслабление</button>
+            <button class="music-btn" data-type="sport">💪 Спорт</button>
+        </div>
+
+        <!-- Плеер -->
+        <div class="playlist-block">
+            <iframe id="music-player" src="https://www.youtube.com/embed/eKO9BGdQ7Wk" allow="autoplay; encrypted-media"
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <script src="music.js"></script>
+</body>
+
+</html>
