@@ -31,7 +31,9 @@ body {
   transform: translateY(-4px);
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   color: #2b6cb0;
   margin-bottom: 20px;
 }
@@ -220,8 +222,13 @@ section {
   transform: translateY(-3px);
 }
 
-.profile-card { width: 260px; }
-.report-section { width: 400px; }
+.profile-card {
+  width: 260px;
+}
+
+.report-section {
+  width: 400px;
+}
 
 /* === ПРИВЫЧКИ === */
 #habits {
@@ -363,13 +370,25 @@ section {
 }
 
 @keyframes fadein-right {
-  from { opacity: 0; transform: translateX(30px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes fadeout {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }
 
 /* === ИИ-ПОМОЩНИК === */
@@ -392,11 +411,12 @@ section {
   margin-bottom: 30px;
 }
 
-.preferences-form, .ai-chat {
+.preferences-form,
+.ai-chat {
   background: white;
   padding: 25px;
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .ai-results {
@@ -404,7 +424,7 @@ section {
   background: white;
   padding: 25px;
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
 }
 
@@ -555,8 +575,9 @@ body.dark .habit-card {
   .ai-content {
     grid-template-columns: 1fr;
   }
-  
-  .preferences-form, .ai-chat {
+
+  .preferences-form,
+  .ai-chat {
     margin-bottom: 20px;
   }
 
@@ -587,650 +608,685 @@ body.auth-page {
   text-align: center;
   color: #666;
 }
+
 .btn-cancel {
-    width: 100%;
-    padding: 14px;
-    background: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 10px;
+  width: 100%;
+  padding: 14px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
 }
 
 .btn-cancel:hover {
-    background: #c82333;
-    transform: translateY(-2px);
+  background: #c82333;
+  transform: translateY(-2px);
 }
+
 /* Хронобиология - Основные стили */
 .chrono-form-section {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    margin: 20px 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px 0;
 }
 
 .chrono-form {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 8px;
-    backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
 }
 
 /* Форма ввода времени */
 .time-select {
-    width: 100%;
-    padding: 12px 15px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    font-size: 16px;
-    transition: border-color 0.3s, background 0.3s;
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 16px;
+  transition: border-color 0.3s, background 0.3s;
 }
 
 .time-select:focus {
-    outline: none;
-    border-color: rgba(255, 255, 255, 0.5);
-    background: rgba(255, 255, 255, 0.15);
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .time-select option {
-    background: #764ba2;
-    color: white;
+  background: #764ba2;
+  color: white;
 }
 
 /* Периоды времени */
 .time-periods {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .time-checkbox {
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.15);
-    padding: 10px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    user-select: none;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
 }
 
 .time-checkbox:hover {
-    background: rgba(255, 255, 255, 0.25);
-    transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
 }
 
 .time-checkbox input {
-    margin-right: 8px;
-    accent-color: #667eea;
+  margin-right: 8px;
+  accent-color: #667eea;
 }
 
 .time-checkbox span {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 /* Кнопки */
 .chronotype-buttons {
-    display: flex;
-    gap: 15px;
-    margin-top: 25px;
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
 }
 
 .analyze-chronotype-btn {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    color: white;
-    border: none;
-    padding: 14px 25px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 16px;
-    flex: 1;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  border: none;
+  padding: 14px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  flex: 1;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .analyze-chronotype-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
 .analyze-chronotype-btn:active {
-    transform: translateY(-1px);
+  transform: translateY(-1px);
 }
 
 .btn-secondary {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 14px 25px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 16px;
-    flex: 1;
-    transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 14px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  flex: 1;
+  transition: all 0.3s ease;
 }
 
 .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
 }
 
 /* Результаты анализа */
 .chronotype-results {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    color: white;
-    padding: 25px;
-    border-radius: 12px;
-    margin: 25px 0;
-    animation: slideIn 0.5s ease-out;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+  padding: 25px;
+  border-radius: 12px;
+  margin: 25px 0;
+  animation: slideIn 0.5s ease-out;
 }
 
 @keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .chronotype-card {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 25px;
-    border-radius: 10px;
-    backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 25px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
 }
 
 /* Заголовок результатов */
 .chronotype-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 .chronotype-badge {
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 165, 0, 0.3) 100%);
-    padding: 8px 20px;
-    border-radius: 25px;
-    font-weight: bold;
-    font-size: 18px;
-    border: 2px solid rgba(255, 215, 0, 0.5);
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 165, 0, 0.3) 100%);
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 18px;
+  border: 2px solid rgba(255, 215, 0, 0.5);
 }
 
 .confidence-badge {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 6px 15px;
-    border-radius: 15px;
-    font-size: 14px;
-    font-weight: 500;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6px 15px;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 /* Детали типа */
 .chronotype-description {
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 25px;
-    opacity: 0.9;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  opacity: 0.9;
 }
 
 .chronotype-details {
-    background: rgba(255, 255, 255, 0.08);
-    padding: 20px;
-    border-radius: 8px;
-    margin: 20px 0;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
 }
 
 .detail-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .detail-item:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .detail-label {
-    font-weight: 600;
-    font-size: 15px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .detail-label::before {
-    content: "✓";
-    color: #4CAF50;
+  content: "✓";
+  color: #4CAF50;
 }
 
 .detail-value {
-    font-weight: 500;
-    font-size: 16px;
-    opacity: 0.95;
+  font-weight: 500;
+  font-size: 16px;
+  opacity: 0.95;
 }
 
 /* Расписание рекомендаций */
 .schedule-recommendations {
-    margin-top: 25px;
+  margin-top: 25px;
 }
 
 .schedule-recommendations h5 {
-    font-size: 18px;
-    margin-bottom: 15px;
-    color: #ffd700;
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #ffd700;
 }
 
 .schedule-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
 }
 
 .schedule-item {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 10px;
-    transition: transform 0.3s ease, background 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+  transition: transform 0.3s ease, background 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .schedule-item:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .schedule-time {
-    font-weight: bold;
-    color: #ffd700;
-    font-size: 16px;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  font-weight: bold;
+  color: #ffd700;
+  font-size: 16px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .schedule-time::before {
-    content: "⏰";
+  content: "⏰";
 }
 
 .schedule-activity {
-    font-size: 15px;
-    line-height: 1.5;
-    margin-bottom: 8px;
-    opacity: 0.9;
+  font-size: 15px;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  opacity: 0.9;
 }
 
 .schedule-reason {
-    font-size: 14px;
-    opacity: 0.8;
-    font-style: italic;
-    line-height: 1.4;
-    padding-top: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 14px;
+  opacity: 0.8;
+  font-style: italic;
+  line-height: 1.4;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Рекомендации в карточках привычек */
 .chrono-recommendation {
-    background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%);
-    border-left: 4px solid #4facfe;
-    padding: 18px;
-    margin: 20px 0;
-    border-radius: 0 8px 8px 0;
-    animation: pulse 2s infinite;
+  background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%);
+  border-left: 4px solid #4facfe;
+  padding: 18px;
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+  animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(79, 172, 254, 0.4); }
-    70% { box-shadow: 0 0 0 10px rgba(79, 172, 254, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(79, 172, 254, 0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(79, 172, 254, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(79, 172, 254, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 172, 254, 0);
+  }
 }
 
 .chrono-recommendation strong {
-    color: #4facfe;
-    font-size: 16px;
-    display: block;
-    margin-bottom: 8px;
+  color: #4facfe;
+  font-size: 16px;
+  display: block;
+  margin-bottom: 8px;
 }
 
 .scientific-basis {
-    font-size: 14px;
-    color: #555;
-    line-height: 1.5;
-    font-style: italic;
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px solid rgba(79, 172, 254, 0.2);
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+  font-style: italic;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(79, 172, 254, 0.2);
 }
 
 /* Чат с ИИ */
 .message {
-    margin: 15px 0;
-    padding: 15px 20px;
-    border-radius: 18px;
-    max-width: 85%;
-    position: relative;
-    animation: fadeIn 0.3s ease-out;
+  margin: 15px 0;
+  padding: 15px 20px;
+  border-radius: 18px;
+  max-width: 85%;
+  position: relative;
+  animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .user-message {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    margin-left: auto;
-    border-bottom-right-radius: 5px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  margin-left: auto;
+  border-bottom-right-radius: 5px;
 }
 
 .ai-message {
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
-    color: #333;
-    margin-right: auto;
-    border-bottom-left-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  color: #333;
+  margin-right: auto;
+  border-bottom-left-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .message-sender {
-    font-weight: 600;
-    margin-bottom: 8px;
-    font-size: 14px;
-    opacity: 0.9;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 14px;
+  opacity: 0.9;
 }
 
 .user-message .message-sender {
-    color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .ai-message .message-sender {
-    color: #667eea;
+  color: #667eea;
 }
 
 .message-content {
-    font-size: 15px;
-    line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 .user-message .message-content {
-    color: rgba(255, 255, 255, 0.95);
+  color: rgba(255, 255, 255, 0.95);
 }
 
 .ai-message .message-content {
-    color: #333;
+  color: #333;
 }
 
 .message-time {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.6);
-    text-align: right;
-    margin-top: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: right;
+  margin-top: 8px;
 }
 
 .ai-message .message-time {
-    color: #666;
+  color: #666;
 }
 
 /* Спиннер загрузки */
 .chat-spinner {
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(102, 126, 234, 0.2);
-    border-top: 3px solid #667eea;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(102, 126, 234, 0.2);
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Кнопки привычек */
 .add-to-tracker-btn {
-    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-    color: white;
-    border: none;
-    padding: 14px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 15px;
-    width: 100%;
-    margin-top: 15px;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  width: 100%;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
 }
 
 .add-to-tracker-btn:hover {
-    background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+  background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
 }
 
 .add-to-tracker-btn:active {
-    transform: translateY(0);
+  transform: translateY(0);
 }
 
 .add-to-tracker-btn::before {
-    content: "➕";
-    font-size: 18px;
+  content: "➕";
+  font-size: 18px;
 }
 
 /* Уведомления */
 .habit-notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-    color: white;
-    padding: 18px 25px;
-    border-radius: 10px;
-    z-index: 1000;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
-    animation: slideInRight 0.3s ease-out, slideOutRight 0.3s ease-in 2.7s;
-    max-width: 350px;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+  padding: 18px 25px;
+  border-radius: 10px;
+  z-index: 1000;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+  animation: slideInRight 0.3s ease-out, slideOutRight 0.3s ease-in 2.7s;
+  max-width: 350px;
 }
 
 @keyframes slideInRight {
-    from {
-        opacity: 0;
-        transform: translateX(100%);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes slideOutRight {
-    from {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    to {
-        opacity: 0;
-        transform: translateX(100%);
-    }
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
 }
 
 /* Адаптивность */
 @media (max-width: 768px) {
-    .chronotype-buttons {
-        flex-direction: column;
-    }
-    
-    .time-periods {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .time-checkbox {
-        justify-content: center;
-        padding: 12px;
-    }
-    
-    .schedule-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .chronotype-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    
-    .message {
-        max-width: 90%;
-        padding: 12px 15px;
-    }
-    
-    .chrono-recommendation {
-        padding: 15px;
-    }
-    
-    .detail-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-    }
-    
-    .detail-value {
-        font-size: 15px;
-        opacity: 0.9;
-    }
+  .chronotype-buttons {
+    flex-direction: column;
+  }
+
+  .time-periods {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .time-checkbox {
+    justify-content: center;
+    padding: 12px;
+  }
+
+  .schedule-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chronotype-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .message {
+    max-width: 90%;
+    padding: 12px 15px;
+  }
+
+  .chrono-recommendation {
+    padding: 15px;
+  }
+
+  .detail-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .detail-value {
+    font-size: 15px;
+    opacity: 0.9;
+  }
 }
 
 @media (max-width: 480px) {
-    .chrono-form-section {
-        padding: 15px;
-    }
-    
-    .chronotype-results {
-        padding: 20px 15px;
-    }
-    
-    .chronotype-card {
-        padding: 20px 15px;
-    }
-    
-    .analyze-chronotype-btn,
-    .btn-secondary {
-        padding: 12px 20px;
-        font-size: 15px;
-    }
-    
-    .add-to-tracker-btn {
-        padding: 12px 15px;
-        font-size: 14px;
-    }
+  .chrono-form-section {
+    padding: 15px;
+  }
+
+  .chronotype-results {
+    padding: 20px 15px;
+  }
+
+  .chronotype-card {
+    padding: 20px 15px;
+  }
+
+  .analyze-chronotype-btn,
+  .btn-secondary {
+    padding: 12px 20px;
+    font-size: 15px;
+  }
+
+  .add-to-tracker-btn {
+    padding: 12px 15px;
+    font-size: 14px;
+  }
 }
 
 /* Текстовые стили для подсказок */
 .help-text {
-    font-size: 14px;
-    opacity: 0.9;
-    margin: 10px 0 20px 0;
-    line-height: 1.5;
+  font-size: 14px;
+  opacity: 0.9;
+  margin: 10px 0 20px 0;
+  line-height: 1.5;
 }
 
 .quiz-question {
-    margin: 20px 0;
-    padding: 15px;
-    background: rgba(102, 126, 234, 0.1);
-    border-radius: 8px;
-    border-left: 4px solid #667eea;
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
 }
 
 .quiz-question p {
-    margin-bottom: 10px;
-    font-weight: 500;
-    color: #333;
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: #333;
 }
 
 .modal-content {
-    max-height: 80vh;
-    overflow-y: auto;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .modal-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
 }
 
 /* Плавная прокрутка */
 .chronotype-results,
 .chrono-form-section {
-    scroll-margin-top: 20px;
+  scroll-margin-top: 20px;
 }
+
 /* Уведомление о демо-режиме */
 .demo-notice {
-    background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%);
-    color: white;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    animation: pulse 2s infinite;
-    border-left: 5px solid #ff5722;
+  background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%);
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  animation: pulse 2s infinite;
+  border-left: 5px solid #ff5722;
 }
 
 .demo-notice-content {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .demo-notice strong {
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .demo-notice strong::before {
-    content: "⚠️";
+  content: "⚠️";
 }
 
 .demo-notice p {
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.4;
-    opacity: 0.9;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  opacity: 0.9;
 }
 
 /* Анимация пульсации для уведомлений */
 @keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.8; }
-    100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
+
 /* Стили для кнопки установки PWA */
 .pwa-install-btn {
   position: fixed;
@@ -1242,7 +1298,7 @@ body.auth-page {
   border-radius: 25px;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   z-index: 999;
   display: none;
   font-family: inherit;
@@ -1256,9 +1312,30 @@ body.auth-page {
 
 .pwa-install-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
 .pwa-install-btn:active {
   transform: translateY(0);
 }
+
+.back-btn {
+  display: inline-block;
+  margin-bottom: 20px;
+  font-size: 18px;
+  text-decoration: none;
+  color: #444;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  transition: 0.2s;
+}
+
+.back-btn:hover {
+  transform: scale(1.05);
+}
+
+
+
+

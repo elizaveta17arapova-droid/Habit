@@ -4,75 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Музыкальная поддержка</title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <style>
-        .music-container {
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .music-title {
-            text-align: center;
-            font-size: 26px;
-            margin-bottom: 25px;
-        }
-
-        .music-buttons {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-
-        .music-btn {
-            padding: 12px 18px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: var(--card);
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.2s;
-        }
-
-        .music-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .playlist-block {
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-        }
-
-        iframe {
-            width: 100%;
-            height: 200px;
-            border-radius: 12px;
-        }
-    </style>
+    <title>Мой плейлист</title>
+    <link rel="stylesheet" href="music.css">
 </head>
 
 <body>
-    <div class="music-container">
-        <h1 class="music-title">🎵 Музыкальная поддержка</h1>
+    <div class="container">
+        <h1>Мой плейлист 🎶</h1>
 
-        <!-- Кнопки переключения -->
-        <div class="music-buttons">
-            <button class="music-btn" data-type="focus">🔥 Фокус</button>
-            <button class="music-btn" data-type="relax">😌 Расслабление</button>
-            <button class="music-btn" data-type="sport">💪 Спорт</button>
+        <div class="add-music">
+            <input type="text" id="music-title" placeholder="Название трека">
+            <input type="text" id="music-category" placeholder="Категория">
+            <input type="text" id="music-url" placeholder="Ссылка на YouTube">
+            <button id="add-btn">Добавить</button>
         </div>
 
-        <!-- Плеер -->
-        <div class="playlist-block">
-            <iframe id="music-player" src="https://www.youtube.com/embed/eKO9BGdQ7Wk" allow="autoplay; encrypted-media"
-                allowfullscreen>
-            </iframe>
+        <div id="playlist"></div>
+
+        <div class="player">
+            <iframe id="player" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
     </div>
 
