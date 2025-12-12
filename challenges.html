@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Челленджи</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { background: #f0f2f5; font-family: Arial, sans-serif; margin: 0; }
+header { background: #667eea; padding: 20px; text-align: center; color: white; font-size: 24px; }
+.challenge-list { padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.challenge-card { background: white; border-radius: 14px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; }
+.challenge-card:hover { transform: translateY(-5px); }
+.challenge-card h3 { margin-top: 0; color: #333; }
+.challenge-details { display: none; margin-top: 10px; }
+.progress-bar { height: 12px; background: #ddd; border-radius: 6px; margin: 10px 0; overflow: hidden; }
+.progress-inner { height: 100%; background: #667eea; width: 0%; transition: 0.3s; }
+.daily-plan { list-style: none; padding: 0; margin-top: 10px; }
+.daily-plan li { background: #f9f9f9; padding: 6px 10px; margin-bottom: 5px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+.daily-plan li.done { background: #d9f7d9; text-decoration: line-through; }
+button { width: 100%; padding: 10px; background: #667eea; color: white; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; margin-top: 10px; }
+button:hover { background: #4a5ed1; }
+.back { display: block; margin: 20px auto; text-align: center; width: 200px; padding: 12px; background: #4a5ed1; border-radius: 8px; text-decoration: none; color: white; }
+.delete-btn { background: #f44336; margin-top: 5px; }
+</style>
+</head>
+
+<body>
+<header>🌟 Челленджи</header>
+
+<div class="challenge-list">
+
+    <!-- Челлендж 1 -->
+    <div class="challenge-card" data-id="challenge1">
+        <h3>7 дней здорового сна 😴</h3>
+        <div class="challenge-details">
+            <p>Перед сном — без телефона, 8 часов отдыха.</p>
+            <div class="progress-bar"><div class="progress-inner"></div></div>
+            <p>Прогресс: <span class="progress-text">0 / 7</span></p>
+            <ul class="daily-plan">
+                <li data-day="1">День 1: Ложиться спать до 23:00</li>
+                <li data-day="2">День 2: Минимум 8 часов сна</li>
+                <li data-day="3">День 3: Нет телефона перед сном</li>
+                <li data-day="4">День 4: Медитация перед сном</li>
+                <li data-day="5">День 5: Чтение книги вместо телефона</li>
+                <li data-day="6">День 6: Поддерживать регулярный режим сна</li>
+                <li data-day="7">День 7: Подведение итогов недели</li>
+            </ul>
+            <button class="start-btn">Начать</button>
+            <button class="complete-day-btn" disabled>Отметить день выполненным</button>
+            <button class="delete-btn">Удалить челлендж</button>
+        </div>
+    </div>
+
+    <!-- Челлендж 2 -->
+    <div class="challenge-card" data-id="challenge2">
+        <h3>7 дней спорта 🏃‍♀️</h3>
+        <div class="challenge-details">
+            <p>Минимум 15 минут активности каждый день.</p>
+            <div class="progress-bar"><div class="progress-inner"></div></div>
+            <p>Прогресс: <span class="progress-text">0 / 7</span></p>
+            <ul class="daily-plan">
+                <li data-day="1">День 1: 15 минут разминки</li>
+                <li data-day="2">День 2: 20 минут ходьбы</li>
+                <li data-day="3">День 3: 15 минут силовой тренировки</li>
+                <li data-day="4">День 4: 20 минут растяжки</li>
+                <li data-day="5">День 5: 15 минут кардио</li>
+                <li data-day="6">День 6: 15 минут йоги</li>
+                <li data-day="7">День 7: Итоговая тренировка</li>
+            </ul>
+            <button class="start-btn">Начать</button>
+            <button class="complete-day-btn" disabled>Отметить день выполненным</button>
+            <button class="delete-btn">Удалить челлендж</button>
+        </div>
+    </div>
+
+    <!-- Челлендж 3 -->
+    <div class="challenge-card" data-id="challenge3">
+        <h3>7 дней правильного питания 🥗</h3>
+        <div class="challenge-details">
+            <p>Каждый день — полезный приём пищи.</p>
+            <div class="progress-bar"><div class="progress-inner"></div></div>
+            <p>Прогресс: <span class="progress-text">0 / 7</span></p>
+            <ul class="daily-plan">
+                <li data-day="1">День 1: Съесть 2 порции овощей</li>
+                <li data-day="2">День 2: Полезный завтрак</li>
+                <li data-day="3">День 3: Заменить сладости фруктами</li>
+                <li data-day="4">День 4: Полезный обед</li>
+                <li data-day="5">День 5: Полезный ужин</li>
+                <li data-day="6">День 6: Пить больше воды</li>
+                <li data-day="7">День 7: Итог дня — здоровое меню</li>
+            </ul>
+            <button class="start-btn">Начать</button>
+            <button class="complete-day-btn" disabled>Отметить день выполненным</button>
+            <button class="delete-btn">Удалить челлендж</button>
+        </div>
+    </div>
+
+</div>
+
+<a href="tracker.html" class="back">← Назад</a>
+
+<script>
+function loadProgress(id) {
+    return Number(localStorage.getItem(id) || 0);
+}
+function saveProgress(id, value) {
+    localStorage.setItem(id, value);
+}
+function updateCard(card) {
+    const id = card.dataset.id;
+    const progress = loadProgress(id);
+    const progressText = card.querySelector(".progress-text");
+    const progressInner = card.querySelector(".progress-inner");
+    const completeBtn = card.querySelector(".complete-day-btn");
+
+    progressText.textContent = `${progress} / 7`;
+    progressInner.style.width = `${(progress / 7) * 100}%`;
+
+    const isActive = localStorage.getItem('active_' + id);
+    completeBtn.disabled = !isActive;
+
+    const planItems = card.querySelectorAll(".daily-plan li");
+    planItems.forEach(item => {
+        const day = Number(item.dataset.day);
+        item.classList.toggle("done", day <= progress);
+    });
+}
+
+// Инициализация всех карточек
+document.querySelectorAll(".challenge-card").forEach(card => {
+    const id = card.dataset.id;
+    const details = card.querySelector(".challenge-details");
+
+    updateCard(card);
+
+    // Показ деталей
+    card.querySelector("h3").addEventListener("click", () => {
+        details.style.display = details.style.display === "block" ? "none" : "block";
+    });
+
+    // Кнопка "Начать"
+    card.querySelector(".start-btn").addEventListener("click", (e) => {
+        e.stopPropagation();
+        saveProgress(id, 0);
+        localStorage.setItem('active_' + id, 1);
+        updateCard(card);
+        alert("Челлендж начат! 💪");
+    });
+
+    // Кнопка "Отметить день выполненным"
+    card.querySelector(".complete-day-btn").addEventListener("click", (e) => {
+        e.stopPropagation();
+        let progress = loadProgress(id);
+        if (progress < 7) {
+            progress++;
+            saveProgress(id, progress);
+            updateCard(card);
+
+            // === Авто-разблокировка достижений ===
+            localStorage.setItem("first_habit_done", true);
+            if (progress >= 3) localStorage.setItem("3_days_row", true);
+            if (progress === 7) localStorage.setItem("7_days_challenge", true);
+
+            if (progress === 7) alert("Поздравляем! 🎉 Челлендж завершён!");
+        }
+    });
+
+    // Кнопка "Удалить челлендж"
+    card.querySelector(".delete-btn").addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (confirm("Вы уверены, что хотите удалить этот челлендж?")) {
+            saveProgress(id, 0);                   // сброс прогресса
+            localStorage.removeItem('active_' + id); // убираем активность
+            updateCard(card);                       // обновляем визуально карточку
+            alert("Челлендж удалён!");
+        }
+    });
+});
+</script>
+
+</body>
+</html>

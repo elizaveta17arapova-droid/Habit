@@ -138,6 +138,9 @@ function toggleDone(index) {
 
     // Обновляем панель геймификации
     updateGamificationPanel();
+      checkAchievements();
+
+    afterHabitUpdate();
 }
 
 
@@ -550,3 +553,96 @@ function loadHabitsFromAI() {
     localStorage.setItem('user_habits', JSON.stringify(allHabits));
     return allHabits;
 }
+
+// -------------------------------------------------------
+// ДОБАВЛЕНИЕ: список описаний челленджей (исправленный)
+// -------------------------------------------------------
+const challengeDescriptions = {
+    "challenge1": [
+        "День 1: Ложиться спать до 23:00",
+        "День 2: Спать минимум 8 часов",
+        "День 3: Не использовать телефон перед сном",
+        "День 4: Медитация перед сном",
+        "День 5: Теплая ванна",
+        "День 6: Легкая нагрузка",
+        "День 7: Отдых"
+    ],
+    "challenge2": [
+        "День 1: Пить 1.5 литра воды",
+        "День 2: Пить 2 литра воды",
+        "День 3: Без сладких напитков",
+        "День 4: Вода с лимоном",
+        "День 5: Контроль водного баланса",
+        "День 6: Много фруктов",
+        "День 7: Полный детокс"
+    ],
+    "challenge3": [
+        "День 1: 20 приседаний",
+        "День 2: 30 приседаний",
+        "День 3: 40 приседаний",
+        "День 4: 20 выпады",
+        "День 5: 40 выпады",
+        "День 6: 20 мин ходьба",
+        "День 7: Растяжка"
+    ]
+};
+
+// -------------------------------------------------------
+// Функция рендера активных челленджей + continue
+// -------------------------------------------------------
+function renderActiveChallenges() {
+    const container = document.getElementById("active-challenges");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    const challengeKeys = ["challenge1", "challenge2", "challenge3"];
+    let hasAny = false;
+
+    challengeKeys.forEach(key => {
+        const isActive = localStorage.getItem("active_" + key);
+        const progress = Number(localStorage.getItem(key)) || 0;
+
+        if (!isActive) return;
+        hasAny = true;
+
+        const totalDays = (challengeDescriptions[key] || []).length;
+
+        const block = document.createElement("div");
+        block.className = "active-card";
+        block.style.border = "1px solid #ddd";
+        block.style.padding = "15px";
+        block.style.borderRadius = "10px";
+        block.style.marginBottom = "15px";
+        block.style.background = "#fafafa";
+
+        block.innerHTML = `
+            <h3 style="margin-bottom: 10px;">${key}</h3>
+            <p><b>Прогресс:</b> ${progress}/${totalDays} дней</p>
+            <div style="margin: 10px 0;">
+                ${ (challengeDescriptions[key] || []).map((day, index) => `
+                    <div style="padding:6px 10px; margin-bottom:5px; border-radius:6px; background:${index < progress ? '#c4ffc4' : '#eee'}">
+                        ${day}
+                    </div>
+                `).join('') }
+            </div>
+            <button onclick="continueChallenge('${key}')" style="padding:8px 12px; background:#3b82f6; color:#fff; border-radius:6px; border:none; cursor:pointer;">
+                Продолжить челлендж
+            </button>
+        `;
+
+        container.appendChild(block);
+    });
+
+    if (!hasAny) {
+        container.innerHTML = "<p>Нет активных челленджей</p>";
+    }
+}
+
+function continueChallenge(id) {
+    // передаём в challenges.html параметр open — там можно открыть нужную карточку
+    window.location.href = "challenges.html?open=" + encodeURIComponent(id);
+}
+
+// Создаём автоматическое обновление (если где-то меняется localStorage)
+setInterval(renderActiveChallenges, 2000);
